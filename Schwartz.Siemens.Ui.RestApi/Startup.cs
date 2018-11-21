@@ -32,6 +32,14 @@ namespace Schwartz.Siemens.Ui.RestApi
                     var context = scope.ServiceProvider.GetService<MaritimeContext>();
                     DatabaseInitializer.SeedDb(context);
                 }
+
+                app.UseCors(opt => opt
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowCredentials()
+                );
+                app.UseAuthentication();
                 app.UseMvc();
             }
         }
