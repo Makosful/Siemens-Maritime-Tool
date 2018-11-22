@@ -1,6 +1,5 @@
 language: csharp
 dotnet: 2.1
-os: windows
 solution: SiemensMaritimeTool.sln
 install:
   - nuget restore SiemensMaritimeTool.sln
