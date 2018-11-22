@@ -1,7 +1,9 @@
 language: csharp
 dotnet: 2.1
-solution: Siemens Maritime Tool.sln
+solution: SiemensMaritimeTool.sln
+install:
+  - nuget restore SiemensMaritimeTool.sln
+  - nuget install xunit.runners -Version 2.4.1 -OutputDirectory testrunner
 script:
-    - dotnet restore
     - dotnet test Schwartz.Siemens.Test.Core.cdproj
     - dotnet test Schwartz.Siemens.Test.Infrastructure.Data.cdproj
