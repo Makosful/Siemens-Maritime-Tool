@@ -1,0 +1,7 @@
+language: csharp
+dotnet: 2.1
+solution: Siemens Maritime Tool.sln
+script:
+    - dotnet restore
+    - dotnet test Schwartz.Siemens.Test.Core.cdproj
+    - dotnet test Schwartz.Siemens.Test.Infrastructure.Data.cdproj

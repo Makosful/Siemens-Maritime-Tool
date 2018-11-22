@@ -11,13 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{F1096843-A6A5-41B2-A589-58DA3EF1FACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Infrastructure.Data", "Schwartz.Siemens.Infrastructure.Data\Schwartz.Siemens.Infrastructure.Data.csproj", "{256976FF-B5D7-4B1B-92C2-21C8D84ABCA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Infrastructure.Data", "Schwartz.Siemens.Infrastructure.Data\Schwartz.Siemens.Infrastructure.Data.csproj", "{256976FF-B5D7-4B1B-92C2-21C8D84ABCA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Infrastructure.Static.Data", "Schwartz.Siemens.Infrastructure.Static.Data\Schwartz.Siemens.Infrastructure.Static.Data.csproj", "{744F0717-57C5-4646-889A-FC9A346FAA20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Infrastructure.Static.Data", "Schwartz.Siemens.Infrastructure.Static.Data\Schwartz.Siemens.Infrastructure.Static.Data.csproj", "{744F0717-57C5-4646-889A-FC9A346FAA20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Core", "Schwartz.Siemens.Core\Schwartz.Siemens.Core.csproj", "{66AB75C6-372C-4BF9-91A8-295746466D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Core", "Schwartz.Siemens.Core\Schwartz.Siemens.Core.csproj", "{66AB75C6-372C-4BF9-91A8-295746466D96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Core.Entities", "Schwartz.Siemens.Core.Entities\Schwartz.Siemens.Core.Entities.csproj", "{10B8606C-5681-4AF1-964E-231767FF2A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Core.Entities", "Schwartz.Siemens.Core.Entities\Schwartz.Siemens.Core.Entities.csproj", "{10B8606C-5681-4AF1-964E-231767FF2A5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Test.Core", "Schwartz.Siemens.Test.Core\Schwartz.Siemens.Test.Core.csproj", "{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Test.Infrastructure.Data", "Schwartz.Siemens.Test.Infrastructure.Data\Schwartz.Siemens.Test.Infrastructure.Data.csproj", "{DD93A243-7B50-43B0-ABD2-135117D22CA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{10B8606C-5681-4AF1-964E-231767FF2A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10B8606C-5681-4AF1-964E-231767FF2A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10B8606C-5681-4AF1-964E-231767FF2A5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD93A243-7B50-43B0-ABD2-135117D22CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD93A243-7B50-43B0-ABD2-135117D22CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD93A243-7B50-43B0-ABD2-135117D22CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD93A243-7B50-43B0-ABD2-135117D22CA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +67,8 @@ Global
 		{744F0717-57C5-4646-889A-FC9A346FAA20} = {B14DE22E-7770-4448-BEAA-838F889158E2}
 		{66AB75C6-372C-4BF9-91A8-295746466D96} = {F1096843-A6A5-41B2-A589-58DA3EF1FACB}
 		{10B8606C-5681-4AF1-964E-231767FF2A5F} = {F1096843-A6A5-41B2-A589-58DA3EF1FACB}
+		{13E9BDBF-4348-4097-AAC1-6F0ADB709A50} = {F1096843-A6A5-41B2-A589-58DA3EF1FACB}
+		{DD93A243-7B50-43B0-ABD2-135117D22CA0} = {B14DE22E-7770-4448-BEAA-838F889158E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2737D294-6C53-4F0C-AC67-A2A70BD2AF55}
