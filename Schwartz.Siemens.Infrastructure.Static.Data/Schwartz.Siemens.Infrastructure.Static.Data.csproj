@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Schwartz.Siemens.Core.Entities\Schwartz.Siemens.Core.Entities.csproj" />
+    <ProjectReference Include="..\Schwartz.Siemens.Core\Schwartz.Siemens.Core.csproj" />
+    <ProjectReference Include="..\Schwartz.Siemens.Infrastructure.Data\Schwartz.Siemens.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
+</Project>
