@@ -7,5 +7,10 @@ namespace Schwartz.Siemens.Core.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Location> Location { get; set; }
+
+        public Rig(int id)
+        {
+            this.Id = id;
+        }
     }
 }
