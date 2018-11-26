@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace Schwartz.Siemens.Test.Core
@@ -8,7 +7,6 @@ namespace Schwartz.Siemens.Test.Core
         [Fact]
         public void Test1()
         {
-
         }
     }
 }
