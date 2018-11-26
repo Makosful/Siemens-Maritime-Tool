@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Schwartz.Siemens.Core.HostedServices;
 using Schwartz.Siemens.Infrastructure.Data;
 using Schwartz.Siemens.Infrastructure.Static.Data;
 
@@ -41,6 +43,10 @@ namespace Schwartz.Siemens.Ui.RestApi
                 );
                 app.UseAuthentication();
                 app.UseMvc();
+                app.UseHangfireDashboard();
+                app.UseHangfireServer();
+
+                //scope.ServiceProvider.GetRequiredService<EstablishHostedServices>().Start();
             }
         }
 
@@ -59,6 +65,8 @@ namespace Schwartz.Siemens.Ui.RestApi
                 // In any other case, use SQLite
                 services.AddDbContext<MaritimeContext>(opt => opt.UseSqlite("Data Source=Siemens.db"));
 
+            services.AddSingleton<EstablishHostedServices>();
+
             // Tells the App to use CORS. Configured in Configure()
             services.AddCors();
             services.AddMvc()
@@ -68,6 +76,10 @@ namespace Schwartz.Siemens.Ui.RestApi
                     // Prevents the JSON parser from going into an endless loop if two objects refer to each other
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.MaxDepth = 2;
+                });
+            services.AddHangfire(conf =>
+                {
+                    conf.UseSqlServerStorage("Server=(localDB)\\MSSQLLocalDB;Integrated Security=true;");
                 });
         }
     }
