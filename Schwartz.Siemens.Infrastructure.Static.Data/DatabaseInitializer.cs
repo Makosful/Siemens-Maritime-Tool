@@ -1,4 +1,5 @@
-﻿using Schwartz.Siemens.Infrastructure.Data;
+﻿using Schwartz.Siemens.Core.Entities;
+using Schwartz.Siemens.Infrastructure.Data;
 
 namespace Schwartz.Siemens.Infrastructure.Static.Data
 {
@@ -8,6 +9,15 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
         {
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
+
+            MockRigs(context);
+
+            context.SaveChanges();
+        }
+
+        private static void MockRigs(MaritimeContext context)
+        {
+            context.Rigs.Add(new Rig(158372) { Name = "MAERSK INSPIRER" });
         }
     }
 }
