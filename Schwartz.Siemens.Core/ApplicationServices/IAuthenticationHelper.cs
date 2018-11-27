@@ -1,6 +1,6 @@
 ﻿using Schwartz.Siemens.Core.Entities.UserBase;
 
-namespace Schwartz.Siemens.Ui.RestApi.Auth
+namespace Schwartz.Siemens.Core.ApplicationServices
 {
     public interface IAuthenticationHelper
     {
