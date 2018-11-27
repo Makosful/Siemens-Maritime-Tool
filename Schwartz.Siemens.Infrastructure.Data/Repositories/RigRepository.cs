@@ -8,12 +8,28 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
 {
     public class RigRepository : IRigRepository
     {
-        public RigRepository(MaritimeContext context)
+        public RigRepository(MaritimeContext context, IWebSpider spider, ILocationRepository locationRepository)
         {
             Context = context;
+            Spider = spider;
+            LocationRepository = locationRepository;
         }
 
         private MaritimeContext Context { get; }
+        private ILocationRepository LocationRepository { get; }
+        private IWebSpider Spider { get; }
+
+        /// <summary>
+        /// Saves a new Rig entity to the storage.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Rig Create(Rig item)
+        {
+            var rig = Context.Rigs.Add(item).Entity;
+            Context.SaveChanges();
+            return rig;
+        }
 
         /// <summary>
         /// Removes a Rig Entity from the storage
@@ -48,18 +64,6 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         {
             return Context.Rigs
                 .Include(r => r.Location);
-        }
-
-        /// <summary>
-        /// Saves a new Rig entity to the storage.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public Rig Create(Rig item)
-        {
-            var rig = Context.Rigs.Add(item).Entity;
-            Context.SaveChanges();
-            return rig;
         }
 
         /// <summary>
