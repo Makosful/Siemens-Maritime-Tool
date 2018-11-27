@@ -88,6 +88,7 @@ namespace Schwartz.Siemens.Ui.RestApi
 
             // Singleton
             services.AddSingleton<EstablishHostedServices>();
+            services.AddSingleton<IWebSpider>(new MarineTrafficSpider("https://www.marinetraffic.com/en/ais/details/ships/shipid:"));
             services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
 
             // Rigs

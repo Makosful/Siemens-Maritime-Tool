@@ -10,7 +10,7 @@ namespace Schwartz.Siemens.Core.Entities.Rigs
 
         public Rig(int id)
         {
-            this.Id = id;
+            Id = id;
         }
     }
 }
