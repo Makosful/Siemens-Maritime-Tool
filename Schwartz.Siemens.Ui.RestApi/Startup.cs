@@ -39,8 +39,7 @@ namespace Schwartz.Siemens.Ui.RestApi
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    var context = scope.ServiceProvider.GetService<MaritimeContext>();
-                    DatabaseInitializer.SeedDb(context);
+                    scope.ServiceProvider.GetRequiredService<IDBInitialization>().SeedDb();
                 }
                 else
                 {
@@ -94,6 +93,12 @@ namespace Schwartz.Siemens.Ui.RestApi
             // Rigs
             services.AddScoped<IRigService, RigService>();
             services.AddScoped<IRigRepository, RigRepository>();
+
+            // Location
+            services.AddScoped<ILocationRepository, LocationRepository>();
+
+            // Database
+            services.AddScoped<IDBInitialization, DatabaseInitializer>();
 
             #endregion Injections
 
