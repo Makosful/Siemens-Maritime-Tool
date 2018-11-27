@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Schwartz.Siemens.Core.ApplicationServices;
-using Schwartz.Siemens.Core.Entities;
+using Schwartz.Siemens.Core.Entities.Rigs;
 using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi.Controllers

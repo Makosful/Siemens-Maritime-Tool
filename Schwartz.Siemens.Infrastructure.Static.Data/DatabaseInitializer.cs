@@ -1,4 +1,4 @@
-﻿using Schwartz.Siemens.Core.Entities;
+﻿using Schwartz.Siemens.Core.Entities.Rigs;
 using Schwartz.Siemens.Infrastructure.Data;
 
 namespace Schwartz.Siemens.Infrastructure.Static.Data

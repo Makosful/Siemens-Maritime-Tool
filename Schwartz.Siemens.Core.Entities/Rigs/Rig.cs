@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Schwartz.Siemens.Core.Entities
+namespace Schwartz.Siemens.Core.Entities.Rigs
 {
     public class Rig
     {

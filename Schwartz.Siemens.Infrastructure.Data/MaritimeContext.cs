@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Schwartz.Siemens.Core.Entities;
+using Schwartz.Siemens.Core.Entities.Rigs;
 
 namespace Schwartz.Siemens.Infrastructure.Data
 {

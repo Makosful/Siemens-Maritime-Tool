@@ -1,4 +1,4 @@
-﻿using Schwartz.Siemens.Core.Entities;
+﻿using Schwartz.Siemens.Core.Entities.Rigs;
 
 namespace Schwartz.Siemens.Core.DomainServices
 {
