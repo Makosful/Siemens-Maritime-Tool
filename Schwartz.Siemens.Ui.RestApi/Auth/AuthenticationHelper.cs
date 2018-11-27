@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.Entities.UserBase;
 using System;
 using System.Collections.Generic;
