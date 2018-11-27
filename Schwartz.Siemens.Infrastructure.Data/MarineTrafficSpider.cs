@@ -18,7 +18,7 @@ namespace Schwartz.Siemens.Infrastructure.Data
 
         public Location GetLatestLocation(int id)
         {
-            var u = $"{_baseUrl}/{id}";
+            var u = $"{_baseUrl}{id}";
             var document = new HtmlWeb().Load(u);
 
             var node = document
@@ -32,14 +32,16 @@ namespace Schwartz.Siemens.Infrastructure.Data
                 .FirstChild
                 .InnerHtml;
 
-            var split = node.Split('/');
+            var split = node
+                .Replace('.', ',')
+                .Split('/');
 
             var lat = split[0].Split('&')[0].Trim();
             var lon = split[1].Split('&')[0].Trim();
 
             return new Location
             {
-                Rig = { Id = id },
+                Rig = new Rig(id),
                 Date = DateTime.Now,
                 Latitude = double.Parse(lat),
                 Longitude = double.Parse(lon)
