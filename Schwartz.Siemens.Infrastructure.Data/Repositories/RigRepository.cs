@@ -83,8 +83,14 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         public IEnumerable<Location> UpdatePositions(IEnumerable<int> validIds)
         {
             var locations = Spider.GetMultipleLocations(validIds).ToList();
+            var rigs = ReadAll().ToList();
 
-            LocationRepository.CreateRange(locations);
+            foreach (var location in locations)
+            {
+                rigs.FirstOrDefault(r => r.Id == location.Rig.Id)?.Location.Add(location);
+            }
+
+            Context.Rigs.UpdateRange(rigs);
 
             return locations;
         }
