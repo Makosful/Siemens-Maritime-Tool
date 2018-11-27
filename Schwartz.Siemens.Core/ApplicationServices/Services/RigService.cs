@@ -38,5 +38,10 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         {
             return RigRepository.Delete(id);
         }
+
+        public List<Location> UpdatePositions(List<int> ids)
+        {
+            return RigRepository.UpdatePositions(ids).ToList();
+        }
     }
 }

@@ -29,6 +29,12 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
             return Ok(RigService.Read(id));
         }
 
+        [HttpPost("update")]
+        public ActionResult M([FromBody] List<int> ids)
+        {
+            return Ok(RigService.UpdatePositions(ids));
+        }
+
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public ActionResult<Rig> CreateRig([FromBody] Rig rig)

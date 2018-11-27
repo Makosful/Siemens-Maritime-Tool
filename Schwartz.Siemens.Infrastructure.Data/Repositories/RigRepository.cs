@@ -16,6 +16,18 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         private MaritimeContext Context { get; }
 
         /// <summary>
+        /// Removes a Rig Entity from the storage
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Rig Delete(int id)
+        {
+            var rig = Read(id);
+            Context.Rigs.Remove(rig);
+            return rig;
+        }
+
+        /// <summary>
         /// Returns the first Rig entity found in the storage, which match the specified ID.
         /// If no Rig entity is found, returns null
         /// </summary>
@@ -64,16 +76,13 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return rig;
         }
 
-        /// <summary>
-        /// Removes a Rig Entity from the storage
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Rig Delete(int id)
+        public IEnumerable<Location> UpdatePositions(IEnumerable<int> validIds)
         {
-            var rig = Read(id);
-            Context.Rigs.Remove(rig);
-            return rig;
+            var locations = Spider.GetMultipleLocations(validIds).ToList();
+
+            LocationRepository.CreateRange(locations);
+
+            return locations;
         }
     }
 }
