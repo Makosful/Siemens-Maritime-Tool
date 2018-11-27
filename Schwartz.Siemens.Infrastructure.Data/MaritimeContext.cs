@@ -14,9 +14,14 @@ namespace Schwartz.Siemens.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Rig>()
-                .HasMany(r => r.Location)
-                .WithOne(l => l.Rig);
+            modelBuilder.Entity<Rig>().HasKey(r => r.Id);
+            modelBuilder.Entity<Location>().HasKey(loc => loc.Id);
+
+            modelBuilder.Entity<Location>()
+                .HasOne(loc => loc.Rig)
+                .WithMany(rig => rig.Location)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

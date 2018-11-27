@@ -59,7 +59,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         public Rig Update(int id, Rig item)
         {
             item.Id = id;
-            var rig = Context.Rigs.Add(item).Entity;
+            var rig = Context.Rigs.Update(item).Entity;
             Context.SaveChanges();
             return rig;
         }
