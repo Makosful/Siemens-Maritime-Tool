@@ -15,6 +15,12 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
 
         private MaritimeContext Context { get; }
 
+        /// <summary>
+        /// Returns the first Rig entity found in the storage, which match the specified ID.
+        /// If no Rig entity is found, returns null
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Rig Read(int id)
         {
             return Context.Rigs
@@ -22,12 +28,21 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
                 .FirstOrDefault(r => r.Id == id);
         }
 
+        /// <summary>
+        /// Retrieves the full list of Rig entities from the storage
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Rig> ReadAll()
         {
             return Context.Rigs
                 .Include(r => r.Location);
         }
 
+        /// <summary>
+        /// Saves a new Rig entity to the storage.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Rig Create(Rig item)
         {
             var rig = Context.Rigs.Add(item).Entity;
@@ -35,6 +50,12 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return rig;
         }
 
+        /// <summary>
+        /// Update the information about an existing Rig entity
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public Rig Update(int id, Rig item)
         {
             item.Id = id;
@@ -43,6 +64,11 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return rig;
         }
 
+        /// <summary>
+        /// Removes a Rig Entity from the storage
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Rig Delete(int id)
         {
             var rig = Read(id);
