@@ -12,9 +12,11 @@ using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.ApplicationServices.Services;
 using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.DomainServices.Repositories;
+using Schwartz.Siemens.Core.Entities;
 using Schwartz.Siemens.Core.HostedServices;
 using Schwartz.Siemens.Infrastructure.Data;
 using Schwartz.Siemens.Infrastructure.Data.Repositories;
+using Schwartz.Siemens.Infrastructure.FileReader;
 using Schwartz.Siemens.Infrastructure.Static.Data;
 using Schwartz.Siemens.Ui.RestApi.Auth;
 using System;
@@ -90,6 +92,7 @@ namespace Schwartz.Siemens.Ui.RestApi
             services.AddSingleton<EstablishHostedServices>();
             services.AddSingleton<IWebSpider>(new MarineTrafficSpider("https://www.marinetraffic.com/en/ais/details/ships/shipid:"));
             services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
+            services.AddSingleton<IFileReader<Country>>(new CsvFileReader());
 
             // Rigs
             services.AddScoped<IRigService, RigService>();

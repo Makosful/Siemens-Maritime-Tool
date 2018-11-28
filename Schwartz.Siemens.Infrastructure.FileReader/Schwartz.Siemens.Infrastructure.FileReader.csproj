@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Schwartz.Siemens.Core.Entities\Schwartz.Siemens.Core.Entities.csproj" />
+    <ProjectReference Include="..\Schwartz.Siemens.Core\Schwartz.Siemens.Core.csproj" />
+  </ItemGroup>
+
+</Project>
