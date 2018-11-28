@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Schwartz.Siemens.Core.DomainServices
+namespace Schwartz.Siemens.Core.DomainServices.Repositories
 {
-    public interface ICrudRepositoryRead<T>
+    public interface ICrudRepositoryRead<out T>
     {
         T Read(int id);
 

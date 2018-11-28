@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.ApplicationServices.Services;
 using Schwartz.Siemens.Core.DomainServices;
+using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.HostedServices;
 using Schwartz.Siemens.Infrastructure.Data;
 using Schwartz.Siemens.Infrastructure.Data.Repositories;

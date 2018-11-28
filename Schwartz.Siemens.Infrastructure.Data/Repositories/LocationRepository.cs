@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Schwartz.Siemens.Core.DomainServices;
+using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities.Rigs;
 using System.Collections.Generic;
 using System.Linq;
