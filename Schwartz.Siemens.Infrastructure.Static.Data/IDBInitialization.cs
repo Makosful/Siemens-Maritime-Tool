@@ -1,6 +1,6 @@
 ﻿namespace Schwartz.Siemens.Infrastructure.Static.Data
 {
-    public interface IDBInitialization
+    public interface IDbInitialization
     {
         void SeedDb();
     }

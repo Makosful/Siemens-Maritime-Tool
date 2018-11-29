@@ -31,7 +31,7 @@ namespace Schwartz.Siemens.Infrastructure.FileReader
                             CountryCode = split[c++],
                             Latitude = double.Parse(split[c++].Replace('.', ',')),
                             Longitude = double.Parse(split[c++].Replace('.', ',')),
-                            Name = split[c++],
+                            Name = split[c],
                         });
                 }
 

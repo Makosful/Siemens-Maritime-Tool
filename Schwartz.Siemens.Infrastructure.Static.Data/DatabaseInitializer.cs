@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Infrastructure.Static.Data
 {
-    public class DatabaseInitializer : IDBInitialization
+    public class DatabaseInitializer : IDbInitialization
     {
         public DatabaseInitializer(IAuthenticationHelper authenticationHelper, MaritimeContext context)
         {

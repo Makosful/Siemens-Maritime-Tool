@@ -4,7 +4,7 @@ using System.Linq;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace Schwartz.Siemens.Core.HostedServices
+namespace Schwartz.Siemens.Core.HostedServices.Services
 {
     public class HostedServices : IHostedService
     {

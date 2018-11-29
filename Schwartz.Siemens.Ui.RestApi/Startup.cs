@@ -14,6 +14,7 @@ using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities;
 using Schwartz.Siemens.Core.HostedServices;
+using Schwartz.Siemens.Core.HostedServices.Services;
 using Schwartz.Siemens.Infrastructure.Data;
 using Schwartz.Siemens.Infrastructure.Data.Repositories;
 using Schwartz.Siemens.Infrastructure.FileReader;
@@ -43,7 +44,7 @@ namespace Schwartz.Siemens.Ui.RestApi
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    scope.ServiceProvider.GetRequiredService<IDBInitialization>().SeedDb();
+                    scope.ServiceProvider.GetRequiredService<IDbInitialization>().SeedDb();
                 }
                 else
                 {
@@ -112,7 +113,7 @@ namespace Schwartz.Siemens.Ui.RestApi
             services.AddScoped<IUserRepository, UserRepository>();
 
             // Database
-            services.AddScoped<IDBInitialization, DatabaseInitializer>();
+            services.AddScoped<IDbInitialization, DatabaseInitializer>();
 
             // Misc
             services.AddScoped<IHostedService, HostedServices>();

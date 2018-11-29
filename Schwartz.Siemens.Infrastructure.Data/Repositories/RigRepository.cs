@@ -10,15 +10,13 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
 {
     public class RigRepository : IRigRepository
     {
-        public RigRepository(MaritimeContext context, IWebSpider spider, ILocationRepository locationRepository)
+        public RigRepository(MaritimeContext context, IWebSpider spider)
         {
             Context = context;
             Spider = spider;
-            LocationRepository = locationRepository;
         }
 
         private MaritimeContext Context { get; }
-        private ILocationRepository LocationRepository { get; }
         private IWebSpider Spider { get; }
 
         /// <summary>
