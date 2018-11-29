@@ -101,6 +101,9 @@ namespace Schwartz.Siemens.Ui.RestApi
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository, LocationRepository>();
 
+            // User
+            services.AddScoped<IUserRepository, UserRepository>();
+
             // Database
             services.AddScoped<IDBInitialization, DatabaseInitializer>();
 
