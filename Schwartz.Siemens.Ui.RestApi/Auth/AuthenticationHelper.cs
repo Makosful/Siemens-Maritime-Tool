@@ -11,12 +11,12 @@ namespace Schwartz.Siemens.Ui.RestApi.Auth
 {
     public class AuthenticationHelper : IAuthenticationHelper
     {
-        public AuthenticationHelper(byte[] secretBytes)
-        {
-            SecretBytes = secretBytes;
-        }
+        private readonly byte[] _secretBytes;
 
-        private byte[] SecretBytes { get; }
+        public AuthenticationHelper(byte[] secret)
+        {
+            _secretBytes = secret;
+        }
 
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -29,7 +29,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Auth
 
         public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedHash))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 if (computedHash.Where((t, i) => t != storedHash[i]).Any())
@@ -37,7 +37,6 @@ namespace Schwartz.Siemens.Ui.RestApi.Auth
                     return false;
                 }
             }
-
             return true;
         }
 
@@ -45,21 +44,21 @@ namespace Schwartz.Siemens.Ui.RestApi.Auth
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Email, user.Email)
             };
+
             if (user.IsAdmin)
                 claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
 
             var token = new JwtSecurityToken(
                 new JwtHeader(new SigningCredentials(
-                    new SymmetricSecurityKey(SecretBytes),
+                    new SymmetricSecurityKey(_secretBytes),
                     SecurityAlgorithms.HmacSha256)),
-                new JwtPayload(
-                    null,
-                    null,
-                    claims.ToArray(),
-                    DateTime.Now,
-                    DateTime.Now.AddMinutes(10)));
+                new JwtPayload(null, // issuer - not needed (ValidateIssuer = false)
+                               null, // audience - not needed (ValidateAudience = false)
+                               claims.ToArray(),
+                               DateTime.Now,               // notBefore
+                               DateTime.Now.AddMinutes(10)));  // expires
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
