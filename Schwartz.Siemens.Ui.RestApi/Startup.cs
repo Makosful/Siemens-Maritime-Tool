@@ -20,6 +20,7 @@ using Schwartz.Siemens.Infrastructure.FileReader;
 using Schwartz.Siemens.Infrastructure.Static.Data;
 using Schwartz.Siemens.Ui.RestApi.Auth;
 using System;
+using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi
 {
@@ -60,6 +61,12 @@ namespace Schwartz.Siemens.Ui.RestApi
                 app.UseMvc();
                 app.UseHangfireDashboard();
                 app.UseHangfireServer();
+
+                scope.ServiceProvider.GetRequiredService<IHostedService>().StartHostedServices();
+                var rigService = scope.ServiceProvider.GetRequiredService<IRigService>();
+                var ids = new List<int>();
+                rigService.ReadAll().ForEach(rig => ids.Add(rig.Id));
+                rigService.UpdatePositions(ids);
             }
         }
 

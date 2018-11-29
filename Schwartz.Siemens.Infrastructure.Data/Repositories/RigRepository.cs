@@ -2,6 +2,7 @@
 using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities.Rigs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -84,6 +85,9 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         public IEnumerable<Location> UpdatePositions(IEnumerable<int> validIds)
         {
             var locations = Spider.GetMultipleLocations(validIds).ToList();
+
+            locations.ForEach(l => Console.WriteLine(l.Id));
+
             var rigs = ReadAll().ToList();
 
             foreach (var location in locations)
@@ -92,6 +96,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             }
 
             Context.Rigs.UpdateRange(rigs);
+            Context.SaveChanges();
 
             return locations;
         }

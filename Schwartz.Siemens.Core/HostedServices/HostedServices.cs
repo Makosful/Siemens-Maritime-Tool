@@ -2,6 +2,8 @@
 using Schwartz.Siemens.Core.DomainServices.Repositories;
 using System.Linq;
 
+// ReSharper disable MemberCanBePrivate.Global
+
 namespace Schwartz.Siemens.Core.HostedServices
 {
     public class HostedServices : IHostedService
@@ -15,11 +17,10 @@ namespace Schwartz.Siemens.Core.HostedServices
 
         public void StartHostedServices()
         {
-            // RecurringJob.AddOrUpdate(() => TimedRigUpdates(), Cron.HourInterval(12));
-            RecurringJob.AddOrUpdate("location-update", () => TimedRigUpdates(), Cron.Minutely);
+            RecurringJob.AddOrUpdate(() => TimedRigUpdates(), Cron.HourInterval(12));
         }
 
-        private void TimedRigUpdates()
+        public void TimedRigUpdates()
         {
             var rigs = RigRepository.ReadAll();
             RigRepository.UpdatePositions(rigs.Select(r => r.Id));
