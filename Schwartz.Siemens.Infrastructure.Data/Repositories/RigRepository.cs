@@ -79,6 +79,11 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return rig;
         }
 
+        /// <summary>
+        /// Given a list of vessel IMOs, this method will attempt to fetch their latest location and add it to the database
+        /// </summary>
+        /// <param name="validIds"></param>
+        /// <returns></returns>
         public IEnumerable<Location> UpdatePositions(IEnumerable<int> validIds)
         {
             var locations = Spider.GetMultipleLocations(validIds).ToList();
