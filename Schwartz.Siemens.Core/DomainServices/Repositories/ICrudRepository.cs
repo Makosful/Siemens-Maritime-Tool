@@ -15,7 +15,7 @@ namespace Schwartz.Siemens.Core.DomainServices.Repositories
 
         T Update(int id, T item);
 
-        T Delete(int id);
+        T Delete(T item);
     }
 
     public interface ICrudRepository<T> : ICrudRepositoryRead<T>, ICrudRepositoryWrite<T>

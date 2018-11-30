@@ -34,13 +34,12 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <summary>
         /// Removes a Rig Entity from the storage
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="item"></param>
         /// <returns></returns>
-        public Rig Delete(int id)
+        public Rig Delete(Rig item)
         {
-            var rig = Read(id);
-            Context.Rigs.Remove(rig);
-            return rig;
+            Context.Rigs.Remove(item);
+            return item;
         }
 
         /// <summary>

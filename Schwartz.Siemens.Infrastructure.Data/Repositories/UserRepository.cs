@@ -66,10 +66,9 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public User Delete(User item)
         {
-            var user = Read(id);
-            Context.Users.Remove(user);
+            Context.Users.Remove(item);
             Context.SaveChanges();
-            return user;
+            return item;
         }
     }
 }

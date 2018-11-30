@@ -41,12 +41,11 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return location;
         }
 
-        public Location Delete(int id)
+        public Location Delete(Location item)
         {
-            var location = Read(id);
-            Context.Locations.Remove(location);
+            Context.Locations.Remove(item);
             Context.SaveChanges();
-            return location;
+            return item;
         }
 
         public void CreateRange(IEnumerable<Location> locations)

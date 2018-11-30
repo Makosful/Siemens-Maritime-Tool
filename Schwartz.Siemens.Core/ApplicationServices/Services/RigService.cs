@@ -63,7 +63,8 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
         public Rig Delete(int id)
         {
-            return RigRepository.Delete(id);
+            var rig = Read(id);
+            return RigRepository.Delete(rig);
         }
 
         public List<Location> UpdatePositions(List<int> ids)

@@ -61,7 +61,8 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <returns></returns>
         public Location Delete(int id)
         {
-            return LocationRepository.Delete(id);
+            var location = Read(id);
+            return LocationRepository.Delete(location);
         }
     }
 }
