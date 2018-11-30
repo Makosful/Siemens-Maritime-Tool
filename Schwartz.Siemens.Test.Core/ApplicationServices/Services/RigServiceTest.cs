@@ -12,6 +12,8 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 {
     public class RigServiceTest
     {
+        #region Setup
+
         private static Mock<IRigRepository> CreateMoqRepository()
         {
             var repository = new Mock<IRigRepository>();
@@ -56,6 +58,10 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 
             return rigs;
         }
+
+        #endregion Setup
+
+        #region Create
 
         [Fact]
         public void RigService_Create_UnsatImo_ExpectsException()
@@ -124,6 +130,10 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             Assert.Equal(expectedRig.Imo, actualRig.Imo);
         }
 
+        #endregion Create
+
+        #region Update
+
         [Theory]
         [InlineData(0)]  // Invalid by default
         [InlineData(-1)] // IMO out of range
@@ -174,8 +184,10 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             Assert.Equal(1, update.Imo);
 
             repository.Verify(rigRepository =>
-                rigRepository.Update(It.IsAny<int>(), It.IsAny<Rig>()),
+                    rigRepository.Update(It.IsAny<int>(), It.IsAny<Rig>()),
                 Times.AtLeastOnce);
         }
+
+        #endregion Update
     }
 }
