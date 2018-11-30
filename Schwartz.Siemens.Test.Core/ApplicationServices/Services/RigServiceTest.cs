@@ -132,6 +132,38 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 
         #endregion Create
 
+        #region Read
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(10)]
+        public void RigService_Read_ImoNotFound_ExpectsNull(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            var rig = service.Read(imo);
+
+            Assert.Null(rig);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void RigService_Read_ValidImo_ExpectsNotNull(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            var rig = service.Read(imo);
+
+            Assert.NotNull(rig);
+        }
+
+        #endregion Read
+
         #region Update
 
         [Theory]
