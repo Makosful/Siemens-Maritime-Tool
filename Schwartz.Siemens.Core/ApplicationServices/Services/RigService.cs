@@ -63,7 +63,11 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
         public Rig Delete(int id)
         {
+            if (id < 1) throw new ArgumentOutOfRangeException(nameof(id), "IMO at 0 and below are invalid and can't be created, therefor, not deleted");
+
             var rig = Read(id);
+            if (rig == null) throw new KeyNotFoundException($"No Rig was found with the given IMO: {id}. The rig wasn't deleted");
+
             return RigRepository.Delete(rig);
         }
 
