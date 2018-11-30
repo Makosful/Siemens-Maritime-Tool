@@ -47,12 +47,17 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
                     nameof(item));
             }
 
-            //return item;
             return RigRepository.Create(item);
         }
 
         public Rig Update(int id, Rig item)
         {
+            if (id < 1) throw new ArgumentOutOfRangeException(nameof(id), "The given IMO cannot be 0 or below. Make sure the rig exists and you have the right IMO");
+
+            if (Read(id) == null) throw new ArgumentOutOfRangeException(nameof(id), "No Rig with the given IMO was found. Make sure the Rig exists and you have the correct IMO");
+
+            if (item == null) throw new ArgumentNullException(nameof(item), "The Rig entity passed in as an argument is null.");
+
             return RigRepository.Update(id, item);
         }
 

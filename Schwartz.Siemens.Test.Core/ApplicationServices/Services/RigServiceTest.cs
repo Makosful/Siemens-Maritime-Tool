@@ -33,6 +33,15 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                     .Returns(MockRigs().ToList()[i]);
             }
 
+            // Setup Update
+            repository.Setup(rigRepository =>
+                    rigRepository.Update(It.IsAny<int>(), It.IsAny<Rig>()))
+                .Returns((int id, Rig rig) =>
+                {
+                    rig.Imo = id;
+                    return rig;
+                });
+
             return repository;
         }
 
@@ -49,7 +58,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         }
 
         [Fact]
-        public void RigService_Create_UnsatId_ExpectsException()
+        public void RigService_Create_UnsatImo_ExpectsException()
         {
             var repository = CreateMoqRepository();
             IRigService service = new RigService(repository.Object);
@@ -62,15 +71,15 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 
         [Theory]
         [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void RigService_Create_ExistingRigId_ExpectsException(int id)
+        [InlineData(2)] // Rigs with these IMO have already been registered in the Moq repository
+        [InlineData(3)] // Duplicates are not allowed
+        public void RigService_Create_ExistingRigImo_ExpectsException(int imo)
         {
             var repository = CreateMoqRepository();
             IRigService service = new RigService(repository.Object);
 
             var exception = Assert.Throws<ArgumentException>(() =>
-                service.Create(new Rig() { Imo = id }));
+                service.Create(new Rig() { Imo = imo }));
 
             Assert.NotNull(exception);
         }
@@ -78,14 +87,14 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Theory]
         [InlineData(-1)]
         [InlineData(-5)]
-        [InlineData(-10)]
-        public void RigService_Create_NegativeId_ExpectsException(int id)
+        [InlineData(-10)] // Rig IMO can't be negative
+        public void RigService_Create_NegativeImo_ExpectsException(int imo)
         {
             var repository = CreateMoqRepository();
             IRigService service = new RigService(repository.Object);
 
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                service.Create(new Rig { Imo = id }));
+                service.Create(new Rig { Imo = imo }));
 
             Assert.NotNull(exception);
         }
@@ -93,17 +102,17 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Theory]
         [InlineData(5)]
         [InlineData(10)]
-        [InlineData(15)]
-        public void RigService_Create_ValidRigParam_ExpectsSameRigReturned(int id)
+        [InlineData(15)] // IMO doesn't need to be in sequence
+        public void RigService_Create_ValidRigParam_ExpectsSameRigReturned(int imo)
         {
             var repository = CreateMoqRepository();
             IRigService service = new RigService(repository.Object);
 
             var expectedRig = new Rig()
             {
-                Imo = id,
+                Imo = imo,
                 Location = new List<Location>(),
-                Name = $"Number {id}"
+                Name = $"Number {imo}"
             };
 
             var actualRig = service.Create(expectedRig);
@@ -113,6 +122,60 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                 Times.AtLeastOnce);
             Assert.NotNull(actualRig);
             Assert.Equal(expectedRig.Imo, actualRig.Imo);
+        }
+
+        [Theory]
+        [InlineData(0)]  // Invalid by default
+        [InlineData(-1)] // IMO out of range
+        public void RigService_Update_InvalidId_ExpectsException(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            var rig = new Rig();
+
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                service.Update(imo, rig));
+
+            Assert.NotNull(exception);
+        }
+
+        [Theory]
+        [InlineData(5)]
+        [InlineData(10)]
+        [InlineData(15)] // These IMO are not registered in the Moq repository
+        public void RigService_Update_ImoNotFound_ExpectsException(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                service.Update(imo, new Rig()));
+        }
+
+        [Fact] // The Rig entity argument holds the updated information. It cannot be null
+        public void RigService_Update_RigArgumentNull_ExpectsException()
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            Assert.Throws<ArgumentNullException>(() => service.Update(1, null));
+        }
+
+        [Fact]
+        public void RigService_Update_ValidParams_ExpectsUpdatedRigReturned()
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            var update = service.Update(1, new Rig() { Name = "Test Rig 101" });
+
+            Assert.NotNull(update);
+            Assert.Equal(1, update.Imo);
+
+            repository.Verify(rigRepository =>
+                rigRepository.Update(It.IsAny<int>(), It.IsAny<Rig>()),
+                Times.AtLeastOnce);
         }
     }
 }
