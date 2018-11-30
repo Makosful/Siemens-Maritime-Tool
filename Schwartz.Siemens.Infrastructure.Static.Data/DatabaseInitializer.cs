@@ -56,8 +56,9 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
                 Latitude = 55.5224998,
                 Longitude = 8.6934396
             }).Entity;
-            Context.Rigs.Add(new Rig(158372)
+            Context.Rigs.Add(new Rig()
             {
+                Id = 158372,
                 Name = "MAERSK INSPIRER",
                 Location = new List<Location>
                 {

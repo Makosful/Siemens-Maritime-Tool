@@ -41,7 +41,7 @@ namespace Schwartz.Siemens.Infrastructure.Data
 
             return new Location
             {
-                Rig = new Rig(id),
+                Rig = new Rig() { Id = id },
                 Date = DateTime.Now,
                 Latitude = double.Parse(lat),
                 Longitude = double.Parse(lon)
