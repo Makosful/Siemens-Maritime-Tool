@@ -221,5 +221,35 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         }
 
         #endregion Update
+
+        #region Delete
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(-5)] // 0 and negative IMOs are invalid
+        public void RigService_Delete_InvalidImo_ExpectsException(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                service.Delete(imo));
+        }
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(10)] // These IMO are out of range
+        public void RigService_Delete_ImoNotFound_ExpectsException(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService service = new RigService(repository.Object);
+
+            Assert.Throws<KeyNotFoundException>(() =>
+                service.Delete(imo));
+        }
+
+        #endregion Delete
     }
 }
