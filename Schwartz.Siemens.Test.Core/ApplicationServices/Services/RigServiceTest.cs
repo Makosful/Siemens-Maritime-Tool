@@ -191,7 +191,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             var repository = CreateMoqRepository();
             IRigService service = new RigService(repository.Object);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<KeyNotFoundException>(() =>
                 service.Update(imo, new Rig()));
         }
 
