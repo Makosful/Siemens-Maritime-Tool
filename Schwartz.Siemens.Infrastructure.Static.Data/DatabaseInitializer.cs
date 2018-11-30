@@ -58,7 +58,7 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
             }).Entity;
             Context.Rigs.Add(new Rig()
             {
-                Id = 158372,
+                Imo = 158372,
                 Name = "MAERSK INSPIRER",
                 Location = new List<Location>
                 {

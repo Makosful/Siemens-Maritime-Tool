@@ -27,20 +27,20 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
         public Rig Create(Rig item)
         {
-            if (item.Id == 0)
+            if (item.Imo == 0)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(item),
                     "Rigs can't have an Id of 0. The ID should match the vessel registration number");
             }
 
-            if (item.Id < 0)
+            if (item.Imo < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(item),
                     "A Rig's ID cant be below 1. Make sure the id matches the vessel's registration number");
             }
 
-            if (Read(item.Id) != null)
+            if (Read(item.Imo) != null)
             {
                 throw new ArgumentException(
                     "A rig with the given ID has already been registered in the database",

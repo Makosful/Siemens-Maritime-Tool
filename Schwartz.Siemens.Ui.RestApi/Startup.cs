@@ -66,7 +66,7 @@ namespace Schwartz.Siemens.Ui.RestApi
                 scope.ServiceProvider.GetRequiredService<IHostedService>().StartHostedServices();
                 var rigService = scope.ServiceProvider.GetRequiredService<IRigService>();
                 var ids = new List<int>();
-                rigService.ReadAll().ForEach(rig => ids.Add(rig.Id));
+                rigService.ReadAll().ForEach(rig => ids.Add(rig.Imo));
                 rigService.UpdatePositions(ids);
             }
         }

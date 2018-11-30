@@ -40,9 +40,9 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         {
             var rigs = new List<Rig>
             {
-                new Rig {Id = 1, Name = "Number One"},
-                new Rig {Id = 2, Name = "Number Two"},
-                new Rig {Id = 3, Name = "Number Three"}
+                new Rig {Imo = 1, Name = "Number One"},
+                new Rig {Imo = 2, Name = "Number Two"},
+                new Rig {Imo = 3, Name = "Number Three"}
             };
 
             return rigs;
@@ -70,7 +70,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             IRigService service = new RigService(repository.Object);
 
             var exception = Assert.Throws<ArgumentException>(() =>
-                service.Create(new Rig() { Id = id }));
+                service.Create(new Rig() { Imo = id }));
 
             Assert.NotNull(exception);
         }
@@ -85,7 +85,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             IRigService service = new RigService(repository.Object);
 
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                service.Create(new Rig { Id = id }));
+                service.Create(new Rig { Imo = id }));
 
             Assert.NotNull(exception);
         }
@@ -101,7 +101,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 
             var expectedRig = new Rig()
             {
-                Id = id,
+                Imo = id,
                 Location = new List<Location>(),
                 Name = $"Number {id}"
             };
@@ -112,7 +112,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                 r => r.Create(It.IsAny<Rig>()),
                 Times.AtLeastOnce);
             Assert.NotNull(actualRig);
-            Assert.Equal(expectedRig.Id, actualRig.Id);
+            Assert.Equal(expectedRig.Imo, actualRig.Imo);
         }
     }
 }

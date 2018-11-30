@@ -53,7 +53,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         {
             return Context.Rigs
                 .Include(r => r.Location)
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefault(r => r.Imo == id);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public Rig Update(int id, Rig item)
         {
-            item.Id = id;
+            item.Imo = id;
             var rig = Context.Rigs.Update(item).Entity;
             Context.SaveChanges();
             return rig;
@@ -90,7 +90,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
 
             foreach (var location in locations)
             {
-                rigs.FirstOrDefault(r => r.Id == location.Rig.Id)?.Location.Add(location);
+                rigs.FirstOrDefault(r => r.Imo == location.Rig.Imo)?.Location.Add(location);
             }
 
             Context.Rigs.UpdateRange(rigs);

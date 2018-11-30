@@ -23,7 +23,7 @@ namespace Schwartz.Siemens.Core.HostedServices.Services
         public void TimedRigUpdates()
         {
             var rigs = RigRepository.ReadAll();
-            RigRepository.UpdatePositions(rigs.Select(r => r.Id));
+            RigRepository.UpdatePositions(rigs.Select(r => r.Imo));
         }
     }
 }
