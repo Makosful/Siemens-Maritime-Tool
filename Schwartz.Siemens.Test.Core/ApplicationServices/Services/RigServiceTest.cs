@@ -51,9 +51,24 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         {
             var rigs = new List<Rig>
             {
-                new Rig {Imo = 1, Name = "Number One"},
-                new Rig {Imo = 2, Name = "Number Two"},
-                new Rig {Imo = 3, Name = "Number Three"}
+                new Rig
+                {
+                    Imo = 1,
+                    Name = "Number One",
+                    Locations = new List<Location>()
+                },
+                new Rig
+                {
+                    Imo = 2,
+                    Name = "Number Two",
+                    Locations = new List<Location>()
+                },
+                new Rig
+                {
+                    Imo = 3,
+                    Name = "Number Three",
+                    Locations = new List<Location>()
+                }
             };
 
             return rigs;
