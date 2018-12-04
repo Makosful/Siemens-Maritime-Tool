@@ -97,7 +97,7 @@ namespace Schwartz.Siemens.Ui.RestApi
             #region Injections
 
             // Singleton
-            services.AddSingleton<IWebSpider>(new MarineTrafficSpider("https://www.marinetraffic.com/en/ais/details/ships/shipid:"));
+            services.AddSingleton<IWebSpider>(new MarineTrafficSpider("https://www.marinetraffic.com/en/ais/details/ships/imo:"));
             services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
             services.AddSingleton<IFileReader<Country>>(new CsvFileReader());
 
