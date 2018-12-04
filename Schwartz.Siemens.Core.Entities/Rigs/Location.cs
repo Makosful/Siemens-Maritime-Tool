@@ -9,5 +9,7 @@ namespace Schwartz.Siemens.Core.Entities.Rigs
         public double Latitude { get; set; }
         public DateTime Date { get; set; }
         public Rig Rig { get; set; }
+        public string Area { get; set; } = "Unknown";
+        public string Status { get; set; } = "Unknown";
     }
 }
