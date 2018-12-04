@@ -5,6 +5,8 @@ namespace Schwartz.Siemens.Core.DomainServices.Repositories
 {
     public interface IRigRepository : ICrudRepository<Rig>
     {
-        IEnumerable<Location> UpdatePositions(IEnumerable<int> validIds);
+        Location UpdateLocation(int imo);
+
+        IEnumerable<Location> UpdateLocations(IEnumerable<int> imos);
     }
 }

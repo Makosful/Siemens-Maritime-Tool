@@ -5,6 +5,12 @@ namespace Schwartz.Siemens.Core.ApplicationServices
 {
     public interface IRigService : ICrudService<Rig>
     {
-        List<Location> UpdatePositions(List<int> ids);
+        Location UpdateLocation(int imo);
+
+        List<Location> UpdatePositions(List<int> imos);
+
+        void UpdatePositionAsync(int imo);
+
+        void UpdateLocationsAsync(List<int> imos);
     }
 }

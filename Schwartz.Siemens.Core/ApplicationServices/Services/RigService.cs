@@ -3,6 +3,7 @@ using Schwartz.Siemens.Core.Entities.Rigs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Schwartz.Siemens.Core.ApplicationServices.Services
 {
@@ -14,29 +15,6 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         }
 
         private IRigRepository RigRepository { get; }
-
-        public Rig Read(int id)
-        {
-            var rig = RigRepository.Read(id);
-            if (rig == null) return null;
-
-            rig.Location = rig.Location.OrderByDescending(location => location.Date).ToList();
-            return rig;
-        }
-
-        public List<Rig> ReadAll()
-        {
-            var rigs = RigRepository.ReadAll().ToList();
-
-            foreach (var rig in rigs)
-            {
-                var list = rig.Location;
-                var orderBy = list.OrderByDescending(l => l.Date);
-                rig.Location = orderBy.ToList();
-            }
-
-            return rigs;
-        }
 
         public Rig Create(Rig item)
         {
@@ -63,6 +41,64 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return RigRepository.Create(item);
         }
 
+        public Rig Delete(int id)
+        {
+            if (id < 1) throw new ArgumentOutOfRangeException(nameof(id), "IMO at 0 and below are invalid and can't be created, therefor, not deleted");
+
+            var rig = Read(id);
+            if (rig == null) throw new KeyNotFoundException($"No Rig was found with the given IMO: {id}. The rig wasn't deleted");
+
+            return RigRepository.Delete(rig);
+        }
+
+        public Rig Read(int id)
+        {
+            var rig = RigRepository.Read(id);
+            if (rig == null) return null;
+
+            rig.Locations = rig.Locations.OrderByDescending(location => location.Date).ToList();
+
+            var latestDate = rig.Locations[0].Date;
+            if (DateTime.Now.Subtract(latestDate).Hours > 12)
+            {
+                UpdatePositionAsync(rig.Imo);
+                rig.Outdated = true;
+            }
+            else
+            {
+                rig.Outdated = false;
+            }
+
+            return rig;
+        }
+
+        public List<Rig> ReadAll()
+        {
+            var rigs = RigRepository.ReadAll().ToList();
+
+            foreach (var rig in rigs)
+            {
+                var locations = rig.Locations;
+                var locationsOrdered = locations.OrderByDescending(l => l.Date).ToList();
+
+                var latestDate = locationsOrdered[0].Date;
+                if (DateTime.Now.Subtract(latestDate).Hours > 12)
+                {
+                    // Fire and forget method
+                    UpdatePositionAsync(rig.Imo);
+                    rig.Outdated = true;
+                }
+                else
+                {
+                    rig.Outdated = false;
+                }
+
+                rig.Locations = locationsOrdered.ToList();
+            }
+
+            return rigs;
+        }
+
         public Rig Update(int id, Rig item)
         {
             if (id < 1) throw new ArgumentOutOfRangeException(nameof(id), "The given IMO cannot be 0 or below. Make sure the rig exists and you have the right IMO");
@@ -74,19 +110,29 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return RigRepository.Update(id, item);
         }
 
-        public Rig Delete(int id)
+        public Location UpdateLocation(int imo)
         {
-            if (id < 1) throw new ArgumentOutOfRangeException(nameof(id), "IMO at 0 and below are invalid and can't be created, therefor, not deleted");
-
-            var rig = Read(id);
-            if (rig == null) throw new KeyNotFoundException($"No Rig was found with the given IMO: {id}. The rig wasn't deleted");
-
-            return RigRepository.Delete(rig);
+            return RigRepository.UpdateLocation(imo);
         }
 
-        public List<Location> UpdatePositions(List<int> ids)
+        public List<Location> UpdatePositions(List<int> imos)
         {
-            return RigRepository.UpdatePositions(ids).ToList();
+            return RigRepository.UpdateLocations(imos).ToList();
+        }
+
+        /// <summary>
+        /// This method is meant to be Fire-and-Forget.
+        /// It will not return any value unlike it's counterpart.
+        /// </summary>
+        /// <param name="imo"></param>
+        public void UpdatePositionAsync(int imo)
+        {
+            Task.Run(() => UpdateLocation(imo));
+        }
+
+        public void UpdateLocationsAsync(List<int> imos)
+        {
+            Task.Run(() => UpdatePositions(imos));
         }
     }
 }
