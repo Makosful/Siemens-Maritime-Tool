@@ -51,7 +51,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         public Rig Read(int id)
         {
             return Context.Rigs
-                .Include(r => r.Location)
+                .Include(r => r.Locations)
                 .FirstOrDefault(r => r.Imo == id);
         }
 
@@ -61,7 +61,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public IEnumerable<Rig> ReadAll()
         {
-            return Context.Rigs.Include(r => r.Location);
+            return Context.Rigs.Include(r => r.Locations);
         }
 
         /// <summary>

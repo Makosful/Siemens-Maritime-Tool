@@ -21,7 +21,7 @@ namespace Schwartz.Siemens.Infrastructure.Data
 
             modelBuilder.Entity<Location>()
                 .HasOne(loc => loc.Rig)
-                .WithMany(rig => rig.Location)
+                .WithMany(rig => rig.Locations)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.SetNull);
         }

@@ -117,7 +117,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             var expectedRig = new Rig()
             {
                 Imo = imo,
-                Location = new List<Location>(),
+                Locations = new List<Location>(),
                 Name = $"Number {imo}"
             };
 

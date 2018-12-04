@@ -60,7 +60,7 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
             {
                 Imo = 8765280,
                 Name = "MAERSK INSPIRER",
-                Location = new List<Location>
+                Locations = new List<Location>
                 {
                     location1,
                     location2,
