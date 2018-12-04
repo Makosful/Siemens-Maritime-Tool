@@ -40,25 +40,25 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
             }).Entity;
             var location2 = Context.Locations.Add(new Location
             {
-                Date = DateTime.Now.AddHours(-12),
+                Date = DateTime.Now.AddHours(12),
                 Latitude = 55.5224998,
                 Longitude = 8.4934396
             }).Entity;
             var location3 = Context.Locations.Add(new Location
             {
-                Date = DateTime.Now.AddHours(-24),
+                Date = DateTime.Now.AddHours(36),
                 Latitude = 55.5224998,
                 Longitude = 8.5934396
             }).Entity;
             var location4 = Context.Locations.Add(new Location
             {
-                Date = DateTime.Now.AddHours(-36),
+                Date = DateTime.Now.AddHours(24),
                 Latitude = 55.5224998,
                 Longitude = 8.6934396
             }).Entity;
             Context.Rigs.Add(new Rig()
             {
-                Imo = 158372,
+                Imo = 8765280,
                 Name = "MAERSK INSPIRER",
                 Location = new List<Location>
                 {
