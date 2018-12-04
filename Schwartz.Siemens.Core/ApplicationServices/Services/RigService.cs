@@ -17,12 +17,25 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
         public Rig Read(int id)
         {
-            return RigRepository.Read(id);
+            var rig = RigRepository.Read(id);
+            if (rig == null) return null;
+
+            rig.Location = rig.Location.OrderByDescending(location => location.Date).ToList();
+            return rig;
         }
 
         public List<Rig> ReadAll()
         {
-            return RigRepository.ReadAll().ToList();
+            var rigs = RigRepository.ReadAll().ToList();
+
+            foreach (var rig in rigs)
+            {
+                var list = rig.Location;
+                var orderBy = list.OrderByDescending(l => l.Date);
+                rig.Location = orderBy.ToList();
+            }
+
+            return rigs;
         }
 
         public Rig Create(Rig item)

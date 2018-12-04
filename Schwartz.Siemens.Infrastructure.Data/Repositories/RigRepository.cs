@@ -50,12 +50,9 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public Rig Read(int id)
         {
-            var rig = Context.Rigs
+            return Context.Rigs
                 .Include(r => r.Location)
                 .FirstOrDefault(r => r.Imo == id);
-
-            rig.Location = rig.Location.OrderByDescending(location => location.Date).ToList();
-            return rig;
         }
 
         /// <summary>
@@ -64,15 +61,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public IEnumerable<Rig> ReadAll()
         {
-            var rigs = Context.Rigs.Include(r => r.Location).ToList();
-            for (var i = 0; i < rigs.Count; i++)
-            {
-                var list = rigs[i].Location;
-                var orderBy = list.OrderByDescending(l => l.Date);
-                rigs[i].Location = orderBy.ToList();
-            }
-
-            return rigs;
+            return Context.Rigs.Include(r => r.Location);
         }
 
         /// <summary>
