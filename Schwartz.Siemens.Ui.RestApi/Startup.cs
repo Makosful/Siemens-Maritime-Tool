@@ -1,5 +1,4 @@
-﻿using Hangfire;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +12,12 @@ using Schwartz.Siemens.Core.ApplicationServices.Services;
 using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities;
-using Schwartz.Siemens.Core.HostedServices;
-using Schwartz.Siemens.Core.HostedServices.Services;
 using Schwartz.Siemens.Infrastructure.Data;
 using Schwartz.Siemens.Infrastructure.Data.Repositories;
 using Schwartz.Siemens.Infrastructure.FileReader;
 using Schwartz.Siemens.Infrastructure.Static.Data;
 using Schwartz.Siemens.Ui.RestApi.Auth;
 using System;
-using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi
 {
@@ -60,14 +56,6 @@ namespace Schwartz.Siemens.Ui.RestApi
                 );
                 app.UseAuthentication();
                 app.UseMvc();
-                app.UseHangfireDashboard();
-                app.UseHangfireServer();
-
-                scope.ServiceProvider.GetRequiredService<IHostedService>().StartHostedServices();
-                var rigService = scope.ServiceProvider.GetRequiredService<IRigService>();
-                var ids = new List<int>();
-                rigService.ReadAll().ForEach(rig => ids.Add(rig.Imo));
-                rigService.UpdatePositions(ids);
             }
         }
 
@@ -115,9 +103,6 @@ namespace Schwartz.Siemens.Ui.RestApi
             // Database
             services.AddScoped<IDbInitialization, DatabaseInitializer>();
 
-            // Misc
-            services.AddScoped<IHostedService, HostedServices>();
-
             #endregion Injections
 
             #region Declarations
@@ -141,10 +126,6 @@ namespace Schwartz.Siemens.Ui.RestApi
                 // Prevents the JSON parser from going into an endless loop if two objects refer to each other
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MaxDepth = 2;
-            });
-            services.AddHangfire(conf =>
-            {
-                conf.UseSqlServerStorage("Server=(localDB)\\MSSQLLocalDB;Integrated Security=true;");
             });
 
             #endregion Declarations
