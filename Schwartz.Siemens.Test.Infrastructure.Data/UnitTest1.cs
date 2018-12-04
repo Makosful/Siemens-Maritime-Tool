@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace Schwartz.Siemens.Test.Infrastructure.Data
@@ -8,7 +7,6 @@ namespace Schwartz.Siemens.Test.Infrastructure.Data
         [Fact]
         public void Test1()
         {
-
         }
     }
 }

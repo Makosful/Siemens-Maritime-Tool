@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Schwartz.Siemens.Core.ApplicationServices;
+using Schwartz.Siemens.Core.ApplicationServices.Services;
+using Schwartz.Siemens.Core.DomainServices;
+using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Infrastructure.Data;
+using Schwartz.Siemens.Infrastructure.Data.Repositories;
 using Schwartz.Siemens.Infrastructure.Static.Data;
+using Schwartz.Siemens.Ui.RestApi.Auth;
+using System;
 
 namespace Schwartz.Siemens.Ui.RestApi
 {
@@ -29,10 +38,14 @@ namespace Schwartz.Siemens.Ui.RestApi
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    var context = scope.ServiceProvider.GetService<MaritimeContext>();
-                    DatabaseInitializer.SeedDb(context);
+                    scope.ServiceProvider.GetRequiredService<IDbInitialization>().SeedDb();
+                }
+                else
+                {
+                    app.UseHsts();
                 }
 
+                app.UseHttpsRedirection();
                 app.UseCors(opt => opt
                     .AllowAnyHeader()
                     .AllowAnyMethod()
@@ -47,6 +60,12 @@ namespace Schwartz.Siemens.Ui.RestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var secretBytes = new byte[40];
+            var random = new Random();
+            random.NextBytes(secretBytes);
+
+            #region Database
+
             // Establish the database
             if (Environment.IsDevelopment())
                 // In development, use in Memory. Remember to seed in Configure()
@@ -59,16 +78,54 @@ namespace Schwartz.Siemens.Ui.RestApi
                 // In any other case, use SQLite
                 services.AddDbContext<MaritimeContext>(opt => opt.UseSqlite("Data Source=Siemens.db"));
 
-            // Tells the App to use CORS. Configured in Configure()
-            services.AddCors();
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(options =>
+            #endregion Database
+
+            #region Injections
+
+            // Singleton
+            services.AddSingleton<IWebSpider>(new MarineTrafficSpider("https://www.marinetraffic.com/en/ais/details/ships/imo:"));
+            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
+
+            // Rigs
+            services.AddScoped<IRigService, RigService>();
+            services.AddScoped<IRigRepository, RigRepository>();
+
+            // Location
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+
+            // User
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // Database
+            services.AddScoped<IDbInitialization, DatabaseInitializer>();
+
+            #endregion Injections
+
+            #region Declarations
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    // Prevents the JSON parser from going into an endless loop if two objects refer to each other
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    options.SerializerSettings.MaxDepth = 2;
-                });
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(5),
+                };
+            });
+            services.AddCors();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                // Prevents the JSON parser from going into an endless loop if two objects refer to each other
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.MaxDepth = 2;
+            });
+
+            #endregion Declarations
         }
     }
 }

@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Core", "Sc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Core.Entities", "Schwartz.Siemens.Core.Entities\Schwartz.Siemens.Core.Entities.csproj", "{10B8606C-5681-4AF1-964E-231767FF2A5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Test.Core", "Schwartz.Siemens.Test.Core\Schwartz.Siemens.Test.Core.csproj", "{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Test.Core", "Schwartz.Siemens.Test.Core\Schwartz.Siemens.Test.Core.csproj", "{13E9BDBF-4348-4097-AAC1-6F0ADB709A50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schwartz.Siemens.Test.Infrastructure.Data", "Schwartz.Siemens.Test.Infrastructure.Data\Schwartz.Siemens.Test.Infrastructure.Data.csproj", "{DD93A243-7B50-43B0-ABD2-135117D22CA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schwartz.Siemens.Test.Infrastructure.Data", "Schwartz.Siemens.Test.Infrastructure.Data\Schwartz.Siemens.Test.Infrastructure.Data.csproj", "{DD93A243-7B50-43B0-ABD2-135117D22CA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
