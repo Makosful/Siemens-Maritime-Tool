@@ -58,15 +58,18 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
             rig.Locations = rig.Locations.OrderByDescending(location => location.Date).ToList();
 
-            var latestDate = rig.Locations[0].Date;
-            if (DateTime.Now.Subtract(latestDate).Hours > 12)
+            if (rig.Locations.Count > 0)
             {
-                UpdatePositionAsync(rig.Imo);
-                rig.Outdated = true;
-            }
-            else
-            {
-                rig.Outdated = false;
+                var latestDate = rig.Locations[0].Date;
+                if (DateTime.Now.Subtract(latestDate).Hours > 12)
+                {
+                    UpdatePositionAsync(rig.Imo);
+                    rig.Outdated = true;
+                }
+                else
+                {
+                    rig.Outdated = false;
+                }
             }
 
             return rig;
