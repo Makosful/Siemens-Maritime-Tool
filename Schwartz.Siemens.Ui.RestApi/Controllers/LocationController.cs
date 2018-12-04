@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
     public class LocationController : ControllerBase
     {
         public LocationController(ILocationService locationService)
