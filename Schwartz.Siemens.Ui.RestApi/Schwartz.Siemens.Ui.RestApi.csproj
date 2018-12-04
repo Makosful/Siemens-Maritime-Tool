@@ -21,7 +21,6 @@
     <ProjectReference Include="..\Schwartz.Siemens.Core.Entities\Schwartz.Siemens.Core.Entities.csproj" />
     <ProjectReference Include="..\Schwartz.Siemens.Core\Schwartz.Siemens.Core.csproj" />
     <ProjectReference Include="..\Schwartz.Siemens.Infrastructure.Data\Schwartz.Siemens.Infrastructure.Data.csproj" />
-    <ProjectReference Include="..\Schwartz.Siemens.Infrastructure.FileReader\Schwartz.Siemens.Infrastructure.FileReader.csproj" />
     <ProjectReference Include="..\Schwartz.Siemens.Infrastructure.Static.Data\Schwartz.Siemens.Infrastructure.Static.Data.csproj" />
   </ItemGroup>
 
