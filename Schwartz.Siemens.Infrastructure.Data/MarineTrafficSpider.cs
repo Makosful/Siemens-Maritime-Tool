@@ -45,6 +45,12 @@ namespace Schwartz.Siemens.Infrastructure.Data
             return ids.Select(GetLatestLocation).ToList();
         }
 
+        public Rig GetRig(int imo)
+        {
+            return new Rig
+            {
+            };
+        }
         private string LastPositionTabs(HtmlDocument doc, int node)
         {
             var raw = doc.GetElementbyId("tabs-last-pos")

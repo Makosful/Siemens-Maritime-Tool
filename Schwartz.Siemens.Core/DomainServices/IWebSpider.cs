@@ -18,5 +18,7 @@ namespace Schwartz.Siemens.Core.DomainServices
         /// <param name="ids"></param>
         /// <returns></returns>
         IEnumerable<Location> GetMultipleLocations(IEnumerable<int> ids);
+
+        Rig GetRig(int imo);
     }
 }
