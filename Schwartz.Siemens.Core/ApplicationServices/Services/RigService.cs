@@ -24,21 +24,22 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             if (item.Imo == 0)
             {
                 throw new ArgumentOutOfRangeException(
-                    nameof(item),
-                    "Rigs can't have an Id of 0. The ID should match the vessel registration number");
+                    nameof(item.Imo),
+                    "Rigs can't have an IMO of 0. This value should match the vessel's International Maritime Organization number");
             }
 
             if (item.Imo < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(item),
-                    "A Rig's ID cant be below 1. Make sure the id matches the vessel's registration number");
+                throw new ArgumentOutOfRangeException(
+                    nameof(item.Imo),
+                    "A Rig's IMO can't be below 1. this value should match the vessel's International Maritime Organization number");
             }
 
             if (Read(item.Imo) != null)
             {
                 throw new ArgumentException(
-                    "A rig with the given ID has already been registered in the database",
-                    nameof(item));
+                    "A Rig with the same IMO has already been found in the database.",
+                    nameof(item.Imo));
             }
 
             return RigRepository.Create(item);
