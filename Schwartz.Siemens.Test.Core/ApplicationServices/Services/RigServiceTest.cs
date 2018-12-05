@@ -239,7 +239,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Fact]
         public void RigService_Read_OrderPositions_ExpectsDescendingDate()
         {
-            var service = CreateService(out var rigRepository, out var locationRepository, out _);
+            var service = CreateService(out _, out var locationRepository, out _);
 
             var rig1 = service.Read(1);
             Assert.NotNull(rig1);
