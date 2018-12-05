@@ -44,7 +44,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Auth
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Name, user.Username)
             };
 
             if (user.IsAdmin)
