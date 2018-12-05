@@ -53,16 +53,32 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             return repository;
         }
 
-        private static Mock<IWebSpider> CreateMoqSpider()
-        {
-            var spider = new Mock<IWebSpider>();
-            return spider;
-        }
-
         private static Mock<ILocationRepository> CreateMoqLocationRepository()
         {
             var locationRepository = new Mock<ILocationRepository>();
+
+            locationRepository.Setup(repository => repository.Create(It.IsAny<Location>()))
+                .Returns((Location loc) => loc);
+
             return locationRepository;
+        }
+
+        private static Mock<IWebSpider> CreateMoqSpider()
+        {
+            var spider = new Mock<IWebSpider>();
+
+            spider.Setup(webSpider => webSpider.GetLatestLocation(It.IsAny<int>()))
+                .Returns(() => new Location());
+
+            spider.Setup(webSpider => webSpider.GetMultipleLocations(It.IsAny<List<int>>()))
+                .Returns(() => new List<Location>
+                {
+                    new Location{Id = 1,},
+                    new Location{Id = 2,},
+                    new Location{Id = 3,},
+                });
+
+            return spider;
         }
 
         private static IEnumerable<Rig> MockRigs()
@@ -222,7 +238,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Fact]
         public void RigService_Read_OrderPositions_ExpectsDescendingDate()
         {
-            var service = CreateService(out var rigRepository, out _, out _);
+            var service = CreateService(out var rigRepository, out var locationRepository, out _);
 
             var rig1 = service.Read(1);
             Assert.NotNull(rig1);
@@ -242,9 +258,9 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             Assert.Equal(9, rig3.Locations[1].Id);
             Assert.Equal(7, rig3.Locations[2].Id);
 
-            rigRepository.Verify(repo =>
-                    repo.UpdateLocation(It.IsAny<int>()),
-                Times.Once);
+            locationRepository.Verify(
+                repository => repository.Create(It.IsAny<Location>()),
+                Times.AtLeastOnce);
         }
 
         [Theory]
