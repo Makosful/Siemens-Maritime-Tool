@@ -16,9 +16,9 @@ namespace Schwartz.Siemens.Infrastructure.Data
             _baseUrl = url;
         }
 
-        public Location GetLatestLocation(int id)
+        public Location GetLatestLocation(int imo)
         {
-            var u = $"{_baseUrl}{id}";
+            var u = $"{_baseUrl}{imo}";
             var document = new HtmlWeb().Load(u);
 
             var posDateString = LastPositionTabs(document, 1); // Position Received. Can be parsed to datetime
@@ -31,7 +31,7 @@ namespace Schwartz.Siemens.Infrastructure.Data
 
             return new Location
             {
-                Rig = new Rig { Imo = id },
+                Rig = new Rig { Imo = imo },
                 Date = date,
                 Latitude = lat,
                 Longitude = lon,
