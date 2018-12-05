@@ -1,4 +1,5 @@
 ﻿using Schwartz.Siemens.Core.ApplicationServices;
+using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.Entities.Rigs;
 using Schwartz.Siemens.Core.Entities.UserBase;
 using Schwartz.Siemens.Infrastructure.Data;
@@ -7,9 +8,9 @@ using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Infrastructure.Static.Data
 {
-    public class DatabaseInitializer : IDbInitialization
+    public class FakeDatabase : IDatabase
     {
-        public DatabaseInitializer(IAuthenticationHelper authenticationHelper, MaritimeContext context)
+        public FakeDatabase(IAuthenticationHelper authenticationHelper, MaritimeContext context)
         {
             AuthenticationHelper = authenticationHelper;
             Context = context;
@@ -17,18 +18,6 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
 
         private IAuthenticationHelper AuthenticationHelper { get; }
         private MaritimeContext Context { get; }
-
-        public void SeedDb()
-        {
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
-            MockRigs();
-
-            MockUsers();
-
-            Context.SaveChanges();
-        }
 
         private void MockRigs()
         {
@@ -79,6 +68,18 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
                 new User { Email = "first@mail.com", PasswordHash = hash, PasswordSalt = salt, IsAdmin = true },
                 new User { Email = "second@mail.com", PasswordHash = hash, PasswordSalt = salt, IsAdmin = false }
                 );
+        }
+
+        public void Initialize()
+        {
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
+            MockRigs();
+
+            MockUsers();
+
+            Context.SaveChanges();
         }
     }
 }
