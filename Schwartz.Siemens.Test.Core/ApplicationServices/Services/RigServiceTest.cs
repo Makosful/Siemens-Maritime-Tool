@@ -15,7 +15,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
     {
         #region Setup
 
-        private static Mock<IRigRepository> CreateMoqRepository()
+        private static Mock<IRigRepository> CreateMoqRigRepository()
         {
             var repository = new Mock<IRigRepository>();
 
@@ -57,6 +57,12 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         {
             var spider = new Mock<IWebSpider>();
             return spider;
+        }
+
+        private static Mock<ILocationRepository> CreateMoqLocationRepository()
+        {
+            var locationRepository = new Mock<ILocationRepository>();
+            return locationRepository;
         }
 
         private static IEnumerable<Rig> MockRigs()
@@ -101,6 +107,21 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             return rigs;
         }
 
+        private static IRigService CreateService(
+            out Mock<IRigRepository> rigRepository,
+            out Mock<ILocationRepository> locationRepository,
+            out Mock<IWebSpider> spider)
+        {
+            rigRepository = CreateMoqRigRepository();
+            locationRepository = CreateMoqLocationRepository();
+            spider = CreateMoqSpider();
+
+            return new RigService(
+                rigRepository.Object,
+                locationRepository.Object,
+                spider.Object);
+        }
+
         #endregion Setup
 
         #region Create
@@ -108,9 +129,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Fact]
         public void RigService_Create_UnsatImo_ExpectsException()
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
                 service.Create(new Rig()));
@@ -124,9 +143,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(3)] // Duplicates are not allowed
         public void RigService_Create_ExistingRigImo_ExpectsException(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var exception = Assert.Throws<ArgumentException>(() =>
                 service.Create(new Rig() { Imo = imo }));
@@ -140,9 +157,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(-10)] // Rig IMO can't be negative
         public void RigService_Create_NegativeImo_ExpectsException(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
                 service.Create(new Rig { Imo = imo }));
@@ -156,9 +171,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(15)] // IMO doesn't need to be in sequence
         public void RigService_Create_ValidRigParam_ExpectsSameRigReturned(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out var rigRepository, out _, out _);
 
             var expectedRig = new Rig()
             {
@@ -169,7 +182,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 
             var actualRig = service.Create(expectedRig);
 
-            repository.Verify(
+            rigRepository.Verify(
                 r => r.Create(It.IsAny<Rig>()),
                 Times.AtLeastOnce);
             Assert.NotNull(actualRig);
@@ -186,9 +199,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(10)]
         public void RigService_Read_ImoNotFound_ExpectsNull(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var rig = service.Read(imo);
 
@@ -201,9 +212,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(3)]
         public void RigService_Read_ValidImo_ExpectsNotNull(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var rig = service.Read(imo);
 
@@ -213,9 +222,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Fact]
         public void RigService_Read_OrderPositions_ExpectsDescendingDate()
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out var rigRepository, out _, out _);
 
             var rig1 = service.Read(1);
             Assert.NotNull(rig1);
@@ -235,8 +242,8 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             Assert.Equal(9, rig3.Locations[1].Id);
             Assert.Equal(7, rig3.Locations[2].Id);
 
-            repository.Verify(rigRepository =>
-                    rigRepository.UpdateLocation(It.IsAny<int>()),
+            rigRepository.Verify(repo =>
+                    repo.UpdateLocation(It.IsAny<int>()),
                 Times.Once);
         }
 
@@ -246,9 +253,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(6)]
         public void RigService_UpdateLocation_InvalidValues_ExpectsNull(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var location = service.UpdateLocation(imo);
 
@@ -261,9 +266,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(3)]
         public void RigService_UpdateLocation_ValidValues_ExpectsLocation(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var location = service.UpdateLocation(imo);
 
@@ -279,9 +282,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(-1)] // IMO out of range
         public void RigService_Update_InvalidId_ExpectsException(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             var rig = new Rig();
 
@@ -297,9 +298,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(15)] // These IMO are not registered in the Moq repository
         public void RigService_Update_ImoNotFound_ExpectsException(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             Assert.Throws<KeyNotFoundException>(() =>
                 service.Update(imo, new Rig()));
@@ -308,9 +307,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Fact] // The Rig entity argument holds the updated information. It cannot be null
         public void RigService_Update_RigArgumentNull_ExpectsException()
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             Assert.Throws<ArgumentNullException>(() => service.Update(1, null));
         }
@@ -318,17 +315,15 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [Fact]
         public void RigService_Update_ValidParams_ExpectsUpdatedRigReturned()
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out var rigRepository, out _, out _);
 
             var update = service.Update(1, new Rig() { Name = "Test Rig 101" });
 
             Assert.NotNull(update);
             Assert.Equal(1, update.Imo);
 
-            repository.Verify(rigRepository =>
-                    rigRepository.Update(It.IsAny<int>(), It.IsAny<Rig>()),
+            rigRepository.Verify(repo =>
+                    repo.Update(It.IsAny<int>(), It.IsAny<Rig>()),
                 Times.AtLeastOnce);
         }
 
@@ -342,9 +337,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(-5)] // 0 and negative IMOs are invalid
         public void RigService_Delete_InvalidImo_ExpectsException(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
                 service.Delete(imo));
@@ -356,9 +349,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         [InlineData(10)] // These IMO are out of range
         public void RigService_Delete_ImoNotFound_ExpectsException(int imo)
         {
-            var repository = CreateMoqRepository();
-            var spider = CreateMoqSpider();
-            IRigService service = new RigService(repository.Object, spider.Object);
+            var service = CreateService(out _, out _, out _);
 
             Assert.Throws<KeyNotFoundException>(() =>
                 service.Delete(imo));
