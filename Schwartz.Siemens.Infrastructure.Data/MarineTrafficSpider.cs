@@ -56,6 +56,22 @@ namespace Schwartz.Siemens.Infrastructure.Data
             ProcessPosition(LastPositionTabs(document, 7), out lat, out lon);
             status = LastPositionTabs(document, 9);
         }
+
+        private string GetRigName(HtmlDocument document)
+        {
+            var raw = document.DocumentNode
+                .SelectSingleNode("//body")
+                .SelectSingleNode("main")
+                .ChildNodes[1].ChildNodes[1]
+                .ChildNodes[1].ChildNodes[9]
+                .ChildNodes[1].ChildNodes[1]
+                .ChildNodes[1].ChildNodes[1]
+                .ChildNodes[3]
+                .InnerHtml;
+
+            return Sanitize(raw);
+        }
+
         private string LastPositionTabs(HtmlDocument doc, int node)
         {
             var raw = doc.GetElementbyId("tabs-last-pos")
