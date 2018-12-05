@@ -48,10 +48,17 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return item;
         }
 
-        public void CreateRange(IEnumerable<Location> locations)
+        public List<Location> CreateRange(IEnumerable<Location> locations)
         {
-            Context.Locations.AddRange(locations);
+            var retur = new List<Location>();
+            foreach (var location in locations)
+            {
+                retur.Add(Context.Locations.Add(location).Entity);
+            }
+
             Context.SaveChanges();
+
+            return retur;
         }
     }
 }
