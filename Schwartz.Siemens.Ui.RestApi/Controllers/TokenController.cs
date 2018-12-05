@@ -2,6 +2,7 @@
 using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Ui.RestApi.Auth;
+using System;
 using System.Linq;
 
 namespace Schwartz.Siemens.Ui.RestApi.Controllers
@@ -21,7 +22,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
         [HttpPost]
         public ActionResult Login([FromBody] LoginModel model)
         {
-            var user = UserRepository.ReadAll().FirstOrDefault(u => u.Email == model.Email);
+            var user = UserRepository.ReadAll().FirstOrDefault(u => u.Username.Equals(model.Username, StringComparison.CurrentCultureIgnoreCase));
             if (user == null) return Unauthorized();
 
             if (!AuthenticationHelper.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))
@@ -29,7 +30,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
 
             return Ok(new
             {
-                email = user.Email,
+                username = user.Username,
                 token = AuthenticationHelper.GenerateToken(user)
             });
         }
