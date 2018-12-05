@@ -117,6 +117,10 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return RigRepository.Update(id, item);
         }
 
+        #region Location Update
+
+        // This section should probably be moved to LocationService instead
+
         /// <summary>
         /// Fetches the latest Location for the Rig with the given IMO
         /// </summary>
@@ -159,5 +163,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         {
             Task.Run(() => UpdateLocations(imos));
         }
+
+        #endregion Location Update
     }
 }
