@@ -32,7 +32,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
         //[HttpPost("update")]
         public ActionResult M([FromBody] List<int> ids)
         {
-            return Ok(RigService.UpdatePositions(ids));
+            return Ok(RigService.UpdateLocations(ids));
         }
 
         //[HttpPost]

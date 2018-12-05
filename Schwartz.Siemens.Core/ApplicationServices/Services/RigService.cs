@@ -63,7 +63,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
                 var latestDate = rig.Locations[0].Date;
                 if (DateTime.Now.Subtract(latestDate).TotalHours > 12)
                 {
-                    UpdatePositionAsync(rig.Imo);
+                    UpdateLocationAsync(rig.Imo);
                     rig.Outdated = true;
                 }
                 else
@@ -88,7 +88,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
                 if (DateTime.Now.Subtract(latestDate).Hours > 12)
                 {
                     // Fire and forget method
-                    UpdatePositionAsync(rig.Imo);
+                    UpdateLocationAsync(rig.Imo);
                     rig.Outdated = true;
                 }
                 else
@@ -121,24 +121,24 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return RigRepository.UpdateLocation(imo);
         }
 
-        public List<Location> UpdatePositions(List<int> imos)
-        {
-            return RigRepository.UpdateLocations(imos).ToList();
-        }
-
         /// <summary>
         /// This method is meant to be Fire-and-Forget.
         /// It will not return any value unlike it's counterpart.
         /// </summary>
         /// <param name="imo"></param>
-        public void UpdatePositionAsync(int imo)
+        public void UpdateLocationAsync(int imo)
         {
             Task.Run(() => UpdateLocation(imo));
         }
 
+        public List<Location> UpdateLocations(List<int> imos)
+        {
+            return RigRepository.UpdateLocations(imos).ToList();
+        }
+
         public void UpdateLocationsAsync(List<int> imos)
         {
-            Task.Run(() => UpdatePositions(imos));
+            Task.Run(() => UpdateLocations(imos));
         }
     }
 }
