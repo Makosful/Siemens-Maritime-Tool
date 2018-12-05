@@ -1,4 +1,5 @@
-﻿using Schwartz.Siemens.Core.DomainServices.Repositories;
+﻿using Schwartz.Siemens.Core.DomainServices;
+using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities.Rigs;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,14 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 {
     public class RigService : IRigService
     {
-        public RigService(IRigRepository rigRepository)
+        public RigService(IRigRepository rigRepository, IWebSpider spider)
         {
             RigRepository = rigRepository;
+            Spider = spider;
         }
 
         private IRigRepository RigRepository { get; }
+        private IWebSpider Spider { get; }
 
         public Rig Create(Rig item)
         {
