@@ -42,8 +42,20 @@ namespace Schwartz.Siemens.Infrastructure.Data
 
         public Rig GetRig(int imo)
         {
+            var u = $"{_baseUrl}{imo}";
+            var document = new HtmlWeb().Load(u);
+
+            var rigName = GetRigName(document);
+
             return new Rig
             {
+                Imo = imo,
+                Name = rigName,
+                Outdated = false,
+                Locations = new List<Location>
+                {
+                    GetLatestLocation(imo),
+                },
             };
         }
 
