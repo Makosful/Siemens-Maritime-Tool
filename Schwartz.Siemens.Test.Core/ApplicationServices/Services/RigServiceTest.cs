@@ -44,6 +44,11 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                     return rig;
                 });
 
+            // Setup UpdatePosition
+            repository.Setup(rigRepository =>
+                    rigRepository.UpdateLocation(It.IsAny<int>()))
+                .Returns(() => new Location());
+
             return repository;
         }
 
@@ -219,6 +224,34 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             repository.Verify(rigRepository =>
                     rigRepository.UpdateLocation(It.IsAny<int>()),
                 Times.Once);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public void RigService_UpdateLocation_InvalidValues_ExpectsNull(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService rigService = new RigService(repository.Object);
+
+            var location = rigService.UpdateLocation(imo);
+
+            Assert.Null(location);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void RigService_UpdateLocation_ValidValues_ExpectsLocation(int imo)
+        {
+            var repository = CreateMoqRepository();
+            IRigService rigService = new RigService(repository.Object);
+
+            var location = rigService.UpdateLocation(imo);
+
+            Assert.NotNull(location);
         }
 
         #endregion Read

@@ -115,6 +115,9 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
         public Location UpdateLocation(int imo)
         {
+            var rig = RigRepository.Read(imo);
+            if (rig == null) return null;
+
             return RigRepository.UpdateLocation(imo);
         }
 
