@@ -10,10 +10,11 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 {
     public class RigService : IRigService
     {
-        public RigService(IRigRepository rigRepository, IWebSpider spider)
+        public RigService(IRigRepository rigRepository, ILocationRepository locationRepository, IWebSpider spider)
         {
             RigRepository = rigRepository;
             Spider = spider;
+            LocationRepository = locationRepository;
         }
 
         private IRigRepository RigRepository { get; }
