@@ -8,9 +8,9 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RigController : ControllerBase
+    public class RigsController : ControllerBase
     {
-        public RigController(IRigService rigService)
+        public RigsController(IRigService rigService)
         {
             RigService = rigService;
         }
