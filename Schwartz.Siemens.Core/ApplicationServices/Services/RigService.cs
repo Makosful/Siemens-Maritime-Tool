@@ -113,6 +113,11 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return RigRepository.Update(id, item);
         }
 
+        /// <summary>
+        /// Fetches the latest Location for the Rig with the given IMO
+        /// </summary>
+        /// <param name="imo"></param>
+        /// <returns></returns>
         public Location UpdateLocation(int imo)
         {
             var rig = RigRepository.Read(imo);
@@ -131,11 +136,21 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             Task.Run(() => UpdateLocation(imo));
         }
 
+        /// <summary>
+        /// Fetches the latest Location for the Rig entities with the given IMOs
+        /// </summary>
+        /// <param name="imos"></param>
+        /// <returns></returns>
         public List<Location> UpdateLocations(List<int> imos)
         {
             return RigRepository.UpdateLocations(imos).ToList();
         }
 
+        /// <summary>
+        /// This method is meant as a Fire-and-Forget.
+        /// It will not return anything, unlike it's counterpart
+        /// </summary>
+        /// <param name="imos"></param>
         public void UpdateLocationsAsync(List<int> imos)
         {
             Task.Run(() => UpdateLocations(imos));
