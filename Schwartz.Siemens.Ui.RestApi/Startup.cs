@@ -42,12 +42,13 @@ namespace Schwartz.Siemens.Ui.RestApi
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    scope.ServiceProvider.GetRequiredService<IDatabase>().Initialize();
                 }
                 else
                 {
                     app.UseHsts();
                 }
+
+                scope.ServiceProvider.GetRequiredService<IDatabase>().Initialize();
 
                 app.UseHttpsRedirection();
                 app.UseCors(opt => opt
