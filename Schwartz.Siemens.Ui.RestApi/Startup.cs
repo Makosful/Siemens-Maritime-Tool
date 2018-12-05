@@ -21,8 +21,12 @@ namespace Schwartz.Siemens.Ui.RestApi
 {
     public class Startup
     {
+        private readonly byte[] _secrets = new byte[40];
+
         public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
+            new Random().NextBytes(_secrets);
+
             Configuration = configuration;
             Environment = environment;
         }
@@ -38,7 +42,7 @@ namespace Schwartz.Siemens.Ui.RestApi
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    scope.ServiceProvider.GetRequiredService<IDbInitialization>().SeedDb();
+                    scope.ServiceProvider.GetRequiredService<IDatabase>().Initialize();
                 }
                 else
                 {
@@ -60,31 +64,42 @@ namespace Schwartz.Siemens.Ui.RestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var secretBytes = new byte[40];
-            var random = new Random();
-            random.NextBytes(secretBytes);
+            ConfigureDatabase(services);
 
-            #region Database
+            ConfigureDependencies(services);
 
+            ConfigureModules(services);
+        }
+
+        private void ConfigureDatabase(IServiceCollection services)
+        {
             // Establish the database
             if (Environment.IsDevelopment())
+            {
                 // In development, use in Memory. Remember to seed in Configure()
                 services.AddDbContext<MaritimeContext>(opt => opt.UseInMemoryDatabase("Siemens"));
+                services.AddScoped<IDatabase, FakeDatabase>();
+            }
             else if (Environment.IsProduction())
+            {
                 // While in production, use MsSql
                 services.AddDbContext<MaritimeContext>(opt =>
                     opt.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+                services.AddScoped<IDatabase, SqlDatabase>();
+            }
             else
+            {
                 // In any other case, use SQLite
                 services.AddDbContext<MaritimeContext>(opt => opt.UseSqlite("Data Source=Siemens.db"));
+                services.AddScoped<IDatabase, SqLiteDatabase>();
+            }
+        }
 
-            #endregion Database
-
-            #region Injections
-
+        private void ConfigureDependencies(IServiceCollection services)
+        {
             // Singleton
             services.AddSingleton<IWebSpider>(new MarineTrafficSpider("https://www.marinetraffic.com/en/ais/details/ships/imo:"));
-            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(secretBytes));
+            services.AddSingleton<IAuthenticationHelper>(new AuthenticationHelper(_secrets));
 
             // Rigs
             services.AddScoped<IRigService, RigService>();
@@ -97,13 +112,11 @@ namespace Schwartz.Siemens.Ui.RestApi
             // User
             services.AddScoped<IUserRepository, UserRepository>();
 
-            // Database
-            services.AddScoped<IDbInitialization, DatabaseInitializer>();
+            // Databases sat under ConfigureDatabase
+        }
 
-            #endregion Injections
-
-            #region Declarations
-
+        private void ConfigureModules(IServiceCollection services)
+        {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
@@ -111,7 +124,7 @@ namespace Schwartz.Siemens.Ui.RestApi
                     ValidateAudience = false,
                     ValidateIssuer = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
+                    IssuerSigningKey = new SymmetricSecurityKey(_secrets),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(5),
                 };
@@ -124,8 +137,6 @@ namespace Schwartz.Siemens.Ui.RestApi
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MaxDepth = 2;
             });
-
-            #endregion Declarations
         }
     }
 }
