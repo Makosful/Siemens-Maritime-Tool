@@ -78,6 +78,9 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                     new Location{Id = 3,},
                 });
 
+            spider.Setup(webSpider => webSpider.GetRig(It.IsAny<int>()))
+                .Returns((int imo) => new Rig() { Imo = imo });
+
             return spider;
         }
 
@@ -191,9 +194,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
 
             var expectedRig = new Rig()
             {
-                Imo = imo,
-                Locations = new List<Location>(),
-                Name = $"Number {imo}"
+                Imo = imo
             };
 
             var actualRig = service.Create(expectedRig);
