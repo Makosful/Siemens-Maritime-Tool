@@ -61,7 +61,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             if (rig.Locations.Count > 0)
             {
                 var latestDate = rig.Locations[0].Date;
-                if (DateTime.Now.Subtract(latestDate).Hours > 12)
+                if (DateTime.Now.Subtract(latestDate).TotalHours > 12)
                 {
                     UpdatePositionAsync(rig.Imo);
                     rig.Outdated = true;

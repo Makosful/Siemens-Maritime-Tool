@@ -55,19 +55,34 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                 {
                     Imo = 1,
                     Name = "Number One",
-                    Locations = new List<Location>()
+                    Locations = new List<Location>
+                    {
+                        new Location {Id = 1, Date = new DateTime(2018, 12, 5)},
+                        new Location {Id = 2, Date = new DateTime(2018, 12, 3)},
+                        new Location {Id = 3, Date = new DateTime(2018, 12, 1)},
+                    }
                 },
                 new Rig
                 {
                     Imo = 2,
                     Name = "Number Two",
-                    Locations = new List<Location>()
+                    Locations = new List<Location>
+                    {
+                        new Location {Id = 4, Date = new DateTime(2018, 12, 1)},
+                        new Location {Id = 5, Date = new DateTime(2018, 12, 3)},
+                        new Location {Id = 6, Date = new DateTime(2018, 12, 5)},
+                    }
                 },
                 new Rig
                 {
                     Imo = 3,
                     Name = "Number Three",
-                    Locations = new List<Location>()
+                    Locations = new List<Location>
+                    {
+                        new Location {Id = 7, Date = new DateTime(2018, 12, 1)},
+                        new Location {Id = 8, Date = new DateTime(2018, 12, 3)},
+                        new Location {Id = 9, Date = new DateTime(2018, 12, 2)},
+                    }
                 }
             };
 
@@ -175,6 +190,35 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             var rig = service.Read(imo);
 
             Assert.NotNull(rig);
+        }
+
+        [Fact]
+        public void RigService_Read_OrderPositions_ExpectsDescendingDate()
+        {
+            var repository = CreateMoqRepository();
+            IRigService rigService = new RigService(repository.Object);
+
+            var rig1 = rigService.Read(1);
+            Assert.NotNull(rig1);
+            Assert.Equal(1, rig1.Locations[0].Id);
+            Assert.Equal(2, rig1.Locations[1].Id);
+            Assert.Equal(3, rig1.Locations[2].Id);
+
+            var rig2 = rigService.Read(2);
+            Assert.NotNull(rig2);
+            Assert.Equal(6, rig2.Locations[0].Id);
+            Assert.Equal(5, rig2.Locations[1].Id);
+            Assert.Equal(4, rig2.Locations[2].Id);
+
+            var rig3 = rigService.Read(3);
+            Assert.NotNull(rig3);
+            Assert.Equal(8, rig3.Locations[0].Id);
+            Assert.Equal(9, rig3.Locations[1].Id);
+            Assert.Equal(7, rig3.Locations[2].Id);
+
+            repository.Verify(rigRepository =>
+                    rigRepository.UpdateLocation(It.IsAny<int>()),
+                Times.Once);
         }
 
         #endregion Read
