@@ -10,13 +10,16 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 {
     public class RigService : IRigService
     {
-        public RigService(IRigRepository rigRepository, ILocationRepository locationRepository, IWebSpider spider)
+        public RigService(IRigRepository rigRepository,
+            ILocationRepository locationRepository,
+            IWebSpider spider)
         {
             RigRepository = rigRepository;
             Spider = spider;
             LocationRepository = locationRepository;
         }
 
+        private ILocationRepository LocationRepository { get; }
         private IRigRepository RigRepository { get; }
         private IWebSpider Spider { get; }
 
@@ -132,7 +135,8 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             var rig = RigRepository.Read(imo);
             if (rig == null) return null;
 
-            return RigRepository.UpdateLocation(imo);
+            var location = Spider.GetLatestLocation(imo);
+            return LocationRepository.Create(location);
         }
 
         /// <summary>
@@ -148,11 +152,19 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <summary>
         /// Fetches the latest Location for the Rig entities with the given IMOs
         /// </summary>
-        /// <param name="imos"></param>
+        /// <param name="imoList"></param>
         /// <returns></returns>
         public List<Location> UpdateLocations(List<int> imoList)
         {
-            return RigRepository.UpdateLocations(imos).ToList();
+            var rigs = RigRepository.ReadAll().ToList();
+            var valid = new List<Rig>();
+            foreach (var rig in rigs)
+                if (imoList.Contains(rig.Imo))
+                    valid.Add(rig);
+
+            var locations = Spider.GetMultipleLocations(valid.Select(rig => rig.Imo));
+
+            return LocationRepository.CreateRange(locations);
         }
 
         /// <summary>
