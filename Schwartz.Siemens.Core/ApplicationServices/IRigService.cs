@@ -7,7 +7,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices
     {
         Location UpdateLocation(int imo);
 
-        List<Location> UpdateLocations(List<int> imos);
+        List<Location> UpdateLocations(List<int> imoList);
 
         void UpdateLocationAsync(int imo);
 

@@ -150,7 +150,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// </summary>
         /// <param name="imos"></param>
         /// <returns></returns>
-        public List<Location> UpdateLocations(List<int> imos)
+        public List<Location> UpdateLocations(List<int> imoList)
         {
             return RigRepository.UpdateLocations(imos).ToList();
         }
