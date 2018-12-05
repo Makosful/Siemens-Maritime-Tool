@@ -8,9 +8,9 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RigController : ControllerBase
+    public class RigsController : ControllerBase
     {
-        public RigController(IRigService rigService)
+        public RigsController(IRigService rigService)
         {
             RigService = rigService;
         }
@@ -29,17 +29,17 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
             return Ok(RigService.Read(id));
         }
 
-        //[HttpPost("update")]
-        public ActionResult M([FromBody] List<int> ids)
-        {
-            return Ok(RigService.UpdatePositions(ids));
-        }
-
-        //[HttpPost]
-        //[Authorize(Roles = "Administrator")]
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Rig> CreateRig([FromBody] Rig rig)
         {
             return Ok(RigService.Create(rig));
+        }
+
+        //[HttpPost("update")]
+        public ActionResult M([FromBody] List<int> ids)
+        {
+            return Ok(RigService.UpdateLocations(ids));
         }
 
         //[HttpPut("{id}")]

@@ -1,4 +1,5 @@
-﻿using Schwartz.Siemens.Core.DomainServices.Repositories;
+﻿using Schwartz.Siemens.Core.DomainServices;
+using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities.Rigs;
 using System;
 using System.Collections.Generic;
@@ -9,36 +10,45 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 {
     public class RigService : IRigService
     {
-        public RigService(IRigRepository rigRepository)
+        public RigService(IRigRepository rigRepository,
+            ILocationRepository locationRepository,
+            IWebSpider spider)
         {
             RigRepository = rigRepository;
+            Spider = spider;
+            LocationRepository = locationRepository;
         }
 
+        private ILocationRepository LocationRepository { get; }
         private IRigRepository RigRepository { get; }
+        private IWebSpider Spider { get; }
 
         public Rig Create(Rig item)
         {
             if (item.Imo == 0)
             {
                 throw new ArgumentOutOfRangeException(
-                    nameof(item),
-                    "Rigs can't have an Id of 0. The ID should match the vessel registration number");
+                    nameof(item.Imo),
+                    "Rigs can't have an IMO of 0. This value should match the vessel's International Maritime Organization number");
             }
 
             if (item.Imo < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(item),
-                    "A Rig's ID cant be below 1. Make sure the id matches the vessel's registration number");
+                throw new ArgumentOutOfRangeException(
+                    nameof(item.Imo),
+                    "A Rig's IMO can't be below 1. this value should match the vessel's International Maritime Organization number");
             }
 
             if (Read(item.Imo) != null)
             {
                 throw new ArgumentException(
-                    "A rig with the given ID has already been registered in the database",
-                    nameof(item));
+                    "A Rig with the same IMO has already been found in the database.",
+                    nameof(item.Imo));
             }
 
-            return RigRepository.Create(item);
+            var rig = Spider.GetRig(item.Imo);
+
+            return RigRepository.Create(rig);
         }
 
         public Rig Delete(int id)
@@ -61,9 +71,9 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             if (rig.Locations.Count > 0)
             {
                 var latestDate = rig.Locations[0].Date;
-                if (DateTime.Now.Subtract(latestDate).Hours > 12)
+                if (DateTime.Now.Subtract(latestDate).TotalHours > 12)
                 {
-                    UpdatePositionAsync(rig.Imo);
+                    UpdateLocationAsync(rig.Imo);
                     rig.Outdated = true;
                 }
                 else
@@ -88,7 +98,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
                 if (DateTime.Now.Subtract(latestDate).Hours > 12)
                 {
                     // Fire and forget method
-                    UpdatePositionAsync(rig.Imo);
+                    UpdateLocationAsync(rig.Imo);
                     rig.Outdated = true;
                 }
                 else
@@ -113,14 +123,22 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return RigRepository.Update(id, item);
         }
 
+        #region Location Update
+
+        // This section should probably be moved to LocationService instead
+
+        /// <summary>
+        /// Fetches the latest Location for the Rig with the given IMO
+        /// </summary>
+        /// <param name="imo"></param>
+        /// <returns></returns>
         public Location UpdateLocation(int imo)
         {
-            return RigRepository.UpdateLocation(imo);
-        }
+            var rig = RigRepository.Read(imo);
+            if (rig == null) return null;
 
-        public List<Location> UpdatePositions(List<int> imos)
-        {
-            return RigRepository.UpdateLocations(imos).ToList();
+            var location = Spider.GetLatestLocation(imo);
+            return LocationRepository.Create(location);
         }
 
         /// <summary>
@@ -128,14 +146,39 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// It will not return any value unlike it's counterpart.
         /// </summary>
         /// <param name="imo"></param>
-        public void UpdatePositionAsync(int imo)
+        public void UpdateLocationAsync(int imo)
         {
             Task.Run(() => UpdateLocation(imo));
         }
 
+        /// <summary>
+        /// Fetches the latest Location for the Rig entities with the given IMOs
+        /// </summary>
+        /// <param name="imoList"></param>
+        /// <returns></returns>
+        public List<Location> UpdateLocations(List<int> imoList)
+        {
+            var rigs = RigRepository.ReadAll().ToList();
+            var valid = new List<Rig>();
+            foreach (var rig in rigs)
+                if (imoList.Contains(rig.Imo))
+                    valid.Add(rig);
+
+            var locations = Spider.GetMultipleLocations(valid.Select(rig => rig.Imo));
+
+            return LocationRepository.CreateRange(locations);
+        }
+
+        /// <summary>
+        /// This method is meant as a Fire-and-Forget.
+        /// It will not return anything, unlike it's counterpart
+        /// </summary>
+        /// <param name="imos"></param>
         public void UpdateLocationsAsync(List<int> imos)
         {
-            Task.Run(() => UpdatePositions(imos));
+            Task.Run(() => UpdateLocations(imos));
         }
+
+        #endregion Location Update
     }
 }

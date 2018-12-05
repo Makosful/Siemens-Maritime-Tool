@@ -16,22 +16,17 @@ namespace Schwartz.Siemens.Infrastructure.Data
             _baseUrl = url;
         }
 
-        public Location GetLatestLocation(int id)
+        public Location GetLatestLocation(int imo)
         {
-            var u = $"{_baseUrl}{id}";
+            var u = $"{_baseUrl}{imo}";
             var document = new HtmlWeb().Load(u);
 
-            var posDateString = LastPositionTabs(document, 1); // Position Received. Can be parsed to datetime
-            var area = LastPositionTabs(document, 5); // Area
-            var posString = LastPositionTabs(document, 7); // Location. Lat and Long are together, Break it up
-            var status = LastPositionTabs(document, 9); // Status
-
-            var date = ProcessDate(posDateString);
-            ProcessPosition(posString, out var lat, out var lon);
+            GetPosition(document,
+                out var date, out var area, out var lat, out var lon, out var status);
 
             return new Location
             {
-                Rig = new Rig { Imo = id },
+                Rig = new Rig { Imo = imo },
                 Date = date,
                 Latitude = lat,
                 Longitude = lon,
@@ -43,6 +38,50 @@ namespace Schwartz.Siemens.Infrastructure.Data
         public IEnumerable<Location> GetMultipleLocations(IEnumerable<int> ids)
         {
             return ids.Select(GetLatestLocation).ToList();
+        }
+
+        public Rig GetRig(int imo)
+        {
+            var u = $"{_baseUrl}{imo}";
+            var document = new HtmlWeb().Load(u);
+
+            var rigName = GetRigName(document);
+
+            return new Rig
+            {
+                Imo = imo,
+                Name = rigName,
+                Outdated = false,
+                Locations = new List<Location>
+                {
+                    GetLatestLocation(imo),
+                },
+            };
+        }
+
+        private void GetPosition(
+            HtmlDocument document, out DateTime date, out string area,
+            out double lat, out double lon, out string status)
+        {
+            date = ProcessDate(LastPositionTabs(document, 1));
+            area = LastPositionTabs(document, 5);
+            ProcessPosition(LastPositionTabs(document, 7), out lat, out lon);
+            status = LastPositionTabs(document, 9);
+        }
+
+        private string GetRigName(HtmlDocument document)
+        {
+            var raw = document.DocumentNode
+                .SelectSingleNode("//body")
+                .SelectSingleNode("main")
+                .ChildNodes[1].ChildNodes[1]
+                .ChildNodes[1].ChildNodes[9]
+                .ChildNodes[1].ChildNodes[1]
+                .ChildNodes[1].ChildNodes[1]
+                .ChildNodes[3]
+                .InnerHtml;
+
+            return Sanitize(raw);
         }
 
         private string LastPositionTabs(HtmlDocument doc, int node)

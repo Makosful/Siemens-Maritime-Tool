@@ -5,6 +5,6 @@ namespace Schwartz.Siemens.Core.DomainServices.Repositories
 {
     public interface ILocationRepository : ICrudRepository<Location>
     {
-        void CreateRange(IEnumerable<Location> locations);
+        List<Location> CreateRange(IEnumerable<Location> locations);
     }
 }
