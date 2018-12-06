@@ -258,10 +258,6 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             Assert.Equal(8, rig3.Locations[0].Id);
             Assert.Equal(9, rig3.Locations[1].Id);
             Assert.Equal(7, rig3.Locations[2].Id);
-
-            locationRepository.Verify(
-                repository => repository.Create(It.IsAny<Location>()),
-                Times.AtLeastOnce);
         }
 
         [Theory]
