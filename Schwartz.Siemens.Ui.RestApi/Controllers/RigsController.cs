@@ -40,11 +40,11 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
             }
             catch (ArgumentOutOfRangeException exception)
             {
-                return BadRequest(exception);
+                return BadRequest(exception.Message);
             }
             catch (ArgumentException exception)
             {
-                return BadRequest(exception);
+                return BadRequest(exception.Message);
             }
         }
 
