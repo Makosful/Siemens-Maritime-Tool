@@ -13,7 +13,7 @@ namespace Schwartz.Siemens.Core.DomainServices.Repositories
     {
         T Create(T item);
 
-        T Update(int id, T item);
+        T Update(T item);
 
         T Delete(T item);
     }

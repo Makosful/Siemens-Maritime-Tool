@@ -3,6 +3,7 @@ using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.Entities.Rigs;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Schwartz.Siemens.Infrastructure.Data
@@ -104,11 +105,13 @@ namespace Schwartz.Siemens.Infrastructure.Data
         private void ProcessPosition(string source, out double lat, out double lon)
         {
             var split = source
-                .Replace('.', ',')
                 .Split('/');
 
-            lat = double.Parse(split[0].Split('&')[0].Trim());
-            lon = double.Parse(split[1].Split('&')[0].Trim());
+            double.TryParse(split[0].Split('&')[0],
+                NumberStyles.Any, CultureInfo.InvariantCulture, out lat);
+
+            double.TryParse(split[1].Split('&')[0],
+                NumberStyles.Any, CultureInfo.InvariantCulture, out lon);
         }
 
         private string Sanitize(string raw)

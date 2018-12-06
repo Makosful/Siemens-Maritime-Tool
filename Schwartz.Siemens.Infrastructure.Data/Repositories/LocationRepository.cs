@@ -30,12 +30,13 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
 
         public Location Create(Location item)
         {
-            return Context.Locations.Add(item).Entity;
+            var location = Context.Locations.Add(item).Entity;
+            Context.SaveChanges();
+            return location;
         }
 
-        public Location Update(int id, Location item)
+        public Location Update(Location item)
         {
-            item.Id = id;
             var location = Context.Locations.Update(item).Entity;
             Context.SaveChanges();
             return location;

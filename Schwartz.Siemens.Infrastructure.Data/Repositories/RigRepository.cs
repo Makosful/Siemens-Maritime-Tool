@@ -2,6 +2,7 @@
 using Schwartz.Siemens.Core.DomainServices;
 using Schwartz.Siemens.Core.DomainServices.Repositories;
 using Schwartz.Siemens.Core.Entities.Rigs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -66,15 +67,21 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <summary>
         /// Update the information about an existing Rig entity
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Rig Update(int id, Rig item)
+        public Rig Update(Rig item)
         {
-            item.Imo = id;
-            var rig = Context.Rigs.Update(item).Entity;
-            Context.SaveChanges();
-            return rig;
+            try
+            {
+                Context.Attach(item).State = EntityState.Modified;
+
+                Context.SaveChanges();
+                return item;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Location UpdateLocation(int imo)

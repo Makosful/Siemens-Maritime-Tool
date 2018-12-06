@@ -46,12 +46,16 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <summary>
         /// Updates the information of a single Location entity
         /// </summary>
-        /// <param name="id">Id of the Location entity to update</param>
+        /// <param name="imo">Id of the Location entity to update</param>
         /// <param name="item">An entity containing the updated information. This ID is ignored</param>
         /// <returns></returns>
-        public Location Update(int id, Location item)
+        public Location Update(int imo, Location item)
         {
-            return LocationRepository.Update(id, item);
+            var location = Read(imo);
+
+            item.Id = location.Id;
+
+            return LocationRepository.Update(item);
         }
 
         /// <summary>

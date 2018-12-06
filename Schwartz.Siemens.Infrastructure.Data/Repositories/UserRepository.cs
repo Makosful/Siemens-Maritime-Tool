@@ -48,12 +48,10 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <summary>
         /// Updates the information of the User with the specified ID with the given information in the User entity
         /// </summary>
-        /// <param name="id">ID of the user to update</param>
         /// <param name="item">New information to overwrite the old</param>
         /// <returns></returns>
-        public User Update(int id, User item)
+        public User Update(User item)
         {
-            item.Id = id;
             var user = Context.Users.Update(item).Entity;
             Context.SaveChanges();
             return user;

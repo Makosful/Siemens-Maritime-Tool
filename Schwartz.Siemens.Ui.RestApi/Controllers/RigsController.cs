@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.Entities.Rigs;
+using System;
 using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi.Controllers
@@ -33,20 +34,42 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult<Rig> CreateRig([FromBody] Rig rig)
         {
-            return Ok(RigService.Create(rig));
+            try
+            {
+                return Ok(RigService.Create(rig));
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
-        //[HttpPost("update")]
-        public ActionResult M([FromBody] List<int> ids)
-        {
-            return Ok(RigService.UpdateLocations(ids));
-        }
-
-        //[HttpPut("{id}")]
+        [HttpPut("{imo}")]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<Rig> UpdateRig(int id, [FromBody] Rig rig)
+        public ActionResult<Rig> UpdateRig(int imo, [FromBody] Rig rig)
         {
-            return Ok(RigService.Update(id, rig));
+            try
+            {
+                var update = RigService.Update(imo, rig);
+                if (update == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(update);
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //[HttpDelete("{id}")]
