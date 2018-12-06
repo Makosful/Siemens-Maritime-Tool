@@ -151,34 +151,6 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             Task.Run(() => UpdateLocation(imo));
         }
 
-        /// <summary>
-        /// Fetches the latest Location for the Rig entities with the given IMOs
-        /// </summary>
-        /// <param name="imoList"></param>
-        /// <returns></returns>
-        public List<Location> UpdateLocations(List<int> imoList)
-        {
-            var rigs = RigRepository.ReadAll().ToList();
-            var valid = new List<Rig>();
-            foreach (var rig in rigs)
-                if (imoList.Contains(rig.Imo))
-                    valid.Add(rig);
-
-            var locations = Spider.GetMultipleLocations(valid.Select(rig => rig.Imo));
-
-            return LocationRepository.CreateRange(locations);
-        }
-
-        /// <summary>
-        /// This method is meant as a Fire-and-Forget.
-        /// It will not return anything, unlike it's counterpart
-        /// </summary>
-        /// <param name="imos"></param>
-        public void UpdateLocationsAsync(List<int> imos)
-        {
-            Task.Run(() => UpdateLocations(imos));
-        }
-
         #endregion Location Update
     }
 }
