@@ -50,9 +50,9 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
 
         //[HttpPut("{id}")]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<Rig> UpdateRig(int id, [FromBody] Rig rig)
+        public ActionResult<Rig> UpdateRig(int imo, [FromBody] Rig rig)
         {
-            return Ok(RigService.Update(id, rig));
+            return Ok(RigService.Update(imo, rig));
         }
 
         //[HttpDelete("{id}")]
