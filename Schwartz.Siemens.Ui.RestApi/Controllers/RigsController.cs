@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.Entities.Rigs;
+using System;
 using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi.Controllers
@@ -33,7 +34,18 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult<Rig> CreateRig([FromBody] Rig rig)
         {
-            return Ok(RigService.Create(rig));
+            try
+            {
+                return Ok(RigService.Create(rig));
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                return BadRequest(exception);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception);
+            }
         }
 
         //[HttpPost("update")]
