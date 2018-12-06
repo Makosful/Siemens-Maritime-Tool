@@ -66,12 +66,10 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <summary>
         /// Update the information about an existing Rig entity
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Rig Update(int id, Rig item)
+        public Rig Update(Rig item)
         {
-            item.Imo = id;
             var rig = Context.Rigs.Update(item).Entity;
             Context.SaveChanges();
             return rig;

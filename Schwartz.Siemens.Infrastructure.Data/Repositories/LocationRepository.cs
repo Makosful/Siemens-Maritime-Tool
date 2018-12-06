@@ -35,9 +35,8 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
             return location;
         }
 
-        public Location Update(int id, Location item)
+        public Location Update(Location item)
         {
-            item.Id = id;
             var location = Context.Locations.Update(item).Entity;
             Context.SaveChanges();
             return location;
