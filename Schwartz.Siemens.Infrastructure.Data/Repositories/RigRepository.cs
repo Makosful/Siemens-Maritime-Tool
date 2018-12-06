@@ -70,9 +70,17 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public Rig Update(Rig item)
         {
-            var rig = Context.Rigs.Update(item).Entity;
-            Context.SaveChanges();
-            return rig;
+            try
+            {
+                Context.Attach(item).State = EntityState.Modified;
+
+                Context.SaveChanges();
+                return item;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Location UpdateLocation(int imo)

@@ -48,11 +48,28 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
             }
         }
 
-        //[HttpPut("{id}")]
+        [HttpPut("{imo}")]
         [Authorize(Roles = "Administrator")]
         public ActionResult<Rig> UpdateRig(int imo, [FromBody] Rig rig)
         {
-            return Ok(RigService.Update(imo, rig));
+            try
+            {
+                var update = RigService.Update(imo, rig);
+                if (update == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(update);
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            catch (ArgumentNullException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         //[HttpDelete("{id}")]
