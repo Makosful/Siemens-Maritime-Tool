@@ -244,19 +244,6 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         }
 
         [Theory]
-        [InlineData(4)]
-        [InlineData(5)]
-        [InlineData(6)]
-        public void RigService_UpdateLocation_InvalidValues_ExpectsNull(int imo)
-        {
-            var service = CreateService(out _, out _);
-
-            var location = service.UpdateLocation(imo);
-
-            Assert.Null(location);
-        }
-
-        [Theory]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
@@ -264,7 +251,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
         {
             var service = CreateService(out _, out _);
 
-            var location = service.UpdateLocation(imo);
+            var location = service.UpdateLocation(new Rig() { Imo = imo });
 
             Assert.NotNull(location);
         }

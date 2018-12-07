@@ -17,6 +17,7 @@ namespace Schwartz.Siemens.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Rig>().HasKey(r => r.Imo);
+            modelBuilder.Entity<Rig>().Property(rig => rig.Imo).ValueGeneratedNever();
 
             modelBuilder.Entity<Location>()
                 .HasOne(loc => loc.Rig)

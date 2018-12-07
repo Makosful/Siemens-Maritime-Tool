@@ -48,9 +48,9 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
                     nameof(item.Imo));
             }
 
-            var rig = Spider.GetRig(item.Imo);
+            //var rig = Spider.GetRig(item.Imo);
 
-            return RigRepository.Create(rig);
+            return RigRepository.Create(item);
         }
 
         public Rig Delete(int id)
@@ -66,25 +66,8 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         public Rig Read(int id)
         {
             var rig = RigRepository.Read(id);
-            if (rig == null) return null;
 
-            rig.Locations = rig.Locations.OrderByDescending(location => location.Date).ToList();
-
-            if (rig.Locations.Count > 0)
-            {
-                var latestDate = rig.Locations[0].Date;
-                if (DateTime.Now.Subtract(latestDate).TotalHours > 12)
-                {
-                    rig = UpdateLocation(rig.Imo);
-                    rig.Outdated = true;
-                }
-                else
-                {
-                    rig.Outdated = false;
-                }
-            }
-
-            return rig;
+            return rig == null ? null : ManageLocation(rig);
         }
 
         public List<Rig> ReadAll()
@@ -93,24 +76,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
             for (var i = 0; i < rigs.Count; i++)
             {
-                {
-                    var locations = rigs[i].Locations;
-                    var locationsOrdered = locations.OrderByDescending(l => l.Date).ToList();
-
-                    var latestDate = locationsOrdered[0].Date;
-                    if (DateTime.Now.Subtract(latestDate).Hours > 12)
-                    {
-                        // Fire and forget method
-                        rigs[i] = UpdateLocation(rigs[i].Imo);
-                        //rig.Outdated = true;
-                    }
-                    else
-                    {
-                        rigs[i].Outdated = false;
-                    }
-
-                    rigs[i].Locations = locationsOrdered.ToList();
-                }
+                rigs[i] = ManageLocation(rigs[i]);
             }
 
             return rigs;
@@ -129,16 +95,31 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <summary>
         /// Fetches the latest Location for the Rig with the given IMO
         /// </summary>
-        /// <param name="imo"></param>
         /// <returns></returns>
-        public Rig UpdateLocation(int imo)
+        public Rig UpdateLocation(Rig rig)
         {
-            var rig = RigRepository.Read(imo);
-            if (rig == null) return null;
+            //var location = Spider.GetLatestLocation(rig.Imo);
+            //rig.Locations.Add(location);
+            return Update(rig.Imo, rig);
+        }
 
-            var location = Spider.GetLatestLocation(imo);
-            rig.Locations.Add(location);
-            return Update(imo, rig);
+        private Rig ManageLocation(Rig rig)
+        {
+            if (rig.Locations.Count > 1)
+            {
+                rig.Locations = rig.Locations.OrderByDescending(l => l.Date).ToList();
+                if (DateTime.Now.Subtract(rig.Locations[0].Date).TotalHours > 12)
+                {
+                    rig = UpdateLocation(rig);
+                    rig.Outdated = true;
+                }
+                else
+                {
+                    rig.Outdated = false;
+                }
+            }
+
+            return rig;
         }
     }
 }
