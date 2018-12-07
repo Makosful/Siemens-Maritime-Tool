@@ -133,8 +133,10 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <returns></returns>
         public Rig UpdateLocation(Rig rig)
         {
-            var rig = RigRepository.Read(imo);
-            if (rig == null) return null;
+            //var location = Spider.GetLatestLocation(rig.Imo);
+            //rig.Locations.Add(location);
+            return Update(rig.Imo, rig);
+        }
 
             var location = Spider.GetLatestLocation(imo);
             rig.Locations.Add(location);
