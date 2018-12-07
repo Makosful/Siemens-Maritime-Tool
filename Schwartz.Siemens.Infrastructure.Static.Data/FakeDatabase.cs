@@ -19,6 +19,18 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
         private IAuthenticationHelper AuthenticationHelper { get; }
         private MaritimeContext Context { get; }
 
+        public void Initialize()
+        {
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
+
+            MockRigs();
+
+            MockUsers();
+
+            Context.SaveChanges();
+        }
+
         private void MockRigs()
         {
             var location1 = Context.Locations.Add(new Location
@@ -68,18 +80,6 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
                 new User { Email = "first@mail.com", Username = "First", PasswordHash = hash, PasswordSalt = salt, IsAdmin = true },
                 new User { Email = "second@mail.com", Username = "Second", PasswordHash = hash, PasswordSalt = salt, IsAdmin = false }
                 );
-        }
-
-        public void Initialize()
-        {
-            Context.Database.EnsureDeleted();
-            Context.Database.EnsureCreated();
-
-            MockRigs();
-
-            MockUsers();
-
-            Context.SaveChanges();
         }
     }
 }
