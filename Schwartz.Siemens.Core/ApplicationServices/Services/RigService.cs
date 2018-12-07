@@ -66,7 +66,6 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         public Rig Read(int id)
         {
             var rig = RigRepository.Read(id);
-            if (rig == null) return null;
 
             return rig == null ? null : ManageLocation(rig);
         }
