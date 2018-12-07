@@ -14,6 +14,7 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
 
         public void Initialize()
         {
+            //Context.Database.EnsureDeleted();
             Context.Database.EnsureCreated();
         }
     }
