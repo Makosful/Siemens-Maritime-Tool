@@ -72,8 +72,8 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
             }
         }
 
-        //[HttpDelete("{id}")]
-        //[Authorize(Roles = "Administrator")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Rig> DeleteRig(int id)
         {
             return Ok(RigService.Delete(id));
