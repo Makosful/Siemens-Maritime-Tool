@@ -138,9 +138,6 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return Update(rig.Imo, rig);
         }
 
-            var location = Spider.GetLatestLocation(imo);
-            rig.Locations.Add(location);
-            return Update(imo, rig);
         }
     }
 }
