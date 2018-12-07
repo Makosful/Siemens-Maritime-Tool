@@ -50,7 +50,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
 
             //var rig = Spider.GetRig(item.Imo);
 
-            return RigRepository.Create(rig);
+            return RigRepository.Create(item);
         }
 
         public Rig Delete(int id)
