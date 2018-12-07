@@ -131,7 +131,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// </summary>
         /// <param name="imo"></param>
         /// <returns></returns>
-        public Rig UpdateLocation(int imo)
+        public Rig UpdateLocation(Rig rig)
         {
             var rig = RigRepository.Read(imo);
             if (rig == null) return null;
