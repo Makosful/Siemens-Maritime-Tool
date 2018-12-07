@@ -48,7 +48,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
                     nameof(item.Imo));
             }
 
-            var rig = Spider.GetRig(item.Imo);
+            //var rig = Spider.GetRig(item.Imo);
 
             return RigRepository.Create(rig);
         }
