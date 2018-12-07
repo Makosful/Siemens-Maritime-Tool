@@ -95,7 +95,6 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <summary>
         /// Fetches the latest Location for the Rig with the given IMO
         /// </summary>
-        /// <param name="imo"></param>
         /// <returns></returns>
         public Rig UpdateLocation(Rig rig)
         {
