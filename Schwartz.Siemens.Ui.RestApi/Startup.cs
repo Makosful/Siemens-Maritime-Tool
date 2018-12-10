@@ -106,10 +106,6 @@ namespace Schwartz.Siemens.Ui.RestApi
             services.AddScoped<IRigService, RigService>();
             services.AddScoped<IRigRepository, RigRepository>();
 
-            // Location
-            services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<ILocationRepository, LocationRepository>();
-
             // User
             services.AddScoped<IUserRepository, UserRepository>();
 
