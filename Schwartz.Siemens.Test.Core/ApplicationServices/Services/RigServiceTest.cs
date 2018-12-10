@@ -189,6 +189,14 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
             Assert.Equal(expectedRig.Imo, actualRig.Imo);
         }
 
+        [Fact]
+        public void RigService_Create_EnsureNotNull_ExpectsException()
+        {
+            var service = CreateService(out _, out _);
+
+            Assert.Throws<ArgumentNullException>(() => service.Create(null));
+        }
+
         #endregion Create
 
         #region Read

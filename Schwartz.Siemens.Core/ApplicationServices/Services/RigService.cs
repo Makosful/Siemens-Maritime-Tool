@@ -27,6 +27,10 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
         /// <returns>A new instance of the Rig entity with all the data filled in</returns>
         public Rig Create(Rig item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item), "A Rig entity has to be passed along for the method to create a new Rig.");
+            }
             if (item.Imo == 0)
             {
                 throw new ArgumentOutOfRangeException(

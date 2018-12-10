@@ -38,8 +38,9 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// <returns></returns>
         public Rig Delete(Rig item)
         {
-            Context.Rigs.Remove(item);
-            return item;
+            var rig = Context.Rigs.Remove(item).Entity;
+            Context.SaveChanges();
+            return rig;
         }
 
         /// <summary>
