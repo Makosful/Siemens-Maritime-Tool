@@ -9,4 +9,3 @@ install:
 script:
 - dotnet build
 - dotnet test Schwartz.Siemens.Test.Core/Schwartz.Siemens.Test.Core.csproj
-- dotnet test Schwartz.Siemens.Test.Infrastructure.Data/Schwartz.Siemens.Test.Infrastructure.Data.csproj
