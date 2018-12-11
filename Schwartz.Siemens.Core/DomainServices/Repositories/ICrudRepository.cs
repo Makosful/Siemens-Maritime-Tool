@@ -6,7 +6,7 @@ namespace Schwartz.Siemens.Core.DomainServices.Repositories
     {
         T Read(int id);
 
-        IEnumerable<T> ReadAll();
+        IEnumerable<T> ReadAll(int page, int items);
     }
 
     public interface ICrudRepositoryWrite<T>

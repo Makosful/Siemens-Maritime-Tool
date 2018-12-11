@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Schwartz.Siemens.Core.Entities.Rigs;
 
 namespace Schwartz.Siemens.Core.ApplicationServices
 {
@@ -6,7 +6,7 @@ namespace Schwartz.Siemens.Core.ApplicationServices
     {
         T Read(int id);
 
-        List<T> ReadAll();
+        FilteredList<T> ReadAll(int page, int items);
     }
 
     public interface ICrudServiceWrite<T>

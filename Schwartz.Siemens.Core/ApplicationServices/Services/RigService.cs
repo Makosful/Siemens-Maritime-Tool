@@ -74,16 +74,15 @@ namespace Schwartz.Siemens.Core.ApplicationServices.Services
             return rig == null ? null : ManageLocation(rig);
         }
 
-        public List<Rig> ReadAll()
+        public FilteredList<Rig> ReadAll(int page, int items)
         {
-            var rigs = RigRepository.ReadAll().ToList();
-
+            var rigs = RigRepository.ReadAll(page, items).ToList();
             for (var i = 0; i < rigs.Count; i++)
             {
                 rigs[i] = ManageLocation(rigs[i]);
             }
 
-            return rigs;
+            return new FilteredList<Rig>(rigs);
         }
 
         public Rig Update(int imo, Rig item)

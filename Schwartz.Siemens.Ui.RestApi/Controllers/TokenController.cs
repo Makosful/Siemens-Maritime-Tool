@@ -22,7 +22,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
         [HttpPost]
         public ActionResult Login([FromBody] LoginModel model)
         {
-            var user = UserRepository.ReadAll().FirstOrDefault(u => u.Username.Equals(model.Username, StringComparison.CurrentCultureIgnoreCase));
+            var user = UserRepository.ReadAll(0, 0).FirstOrDefault(u => u.Username.Equals(model.Username, StringComparison.CurrentCultureIgnoreCase));
             if (user == null) return Unauthorized();
 
             if (!AuthenticationHelper.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))

@@ -24,7 +24,7 @@ namespace Schwartz.Siemens.Test.Core.ApplicationServices.Services
                 .Returns((Rig rig) => rig);
 
             // Setup ReadAll
-            repository.Setup(rigRepository => rigRepository.ReadAll())
+            repository.Setup(rigRepository => rigRepository.ReadAll(It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(MockRigs);
 
             // Setup Read single

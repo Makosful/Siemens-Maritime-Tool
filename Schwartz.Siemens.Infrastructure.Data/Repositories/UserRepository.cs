@@ -28,7 +28,7 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// Retrieves a list of all the users stored in the database
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<User> ReadAll()
+        public IEnumerable<User> ReadAll(int page, int items)
         {
             return Context.Users;
         }

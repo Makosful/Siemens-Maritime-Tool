@@ -26,7 +26,7 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
             if (string.IsNullOrEmpty(model.Username.Trim()) || string.IsNullOrEmpty(model.Password.Trim()))
                 return BadRequest();
 
-            var users = UserRepository.ReadAll().ToList();
+            var users = UserRepository.ReadAll(0, 0).ToList();
 
             if (users.Count > 0)
                 return BadRequest();
