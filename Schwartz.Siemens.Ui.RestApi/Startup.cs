@@ -132,7 +132,7 @@ namespace Schwartz.Siemens.Ui.RestApi
             {
                 // Prevents the JSON parser from going into an endless loop if two objects refer to each other
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.MaxDepth = 2;
+                //options.SerializerSettings.MaxDepth = 2;
             });
         }
     }
