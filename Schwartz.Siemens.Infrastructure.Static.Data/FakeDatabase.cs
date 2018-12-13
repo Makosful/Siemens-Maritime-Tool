@@ -77,8 +77,7 @@ namespace Schwartz.Siemens.Infrastructure.Static.Data
             AuthenticationHelper.CreatePasswordHash(pass, out var hash, out var salt);
 
             Context.Users.AddRange(
-                new User { Email = "first@mail.com", Username = "First", PasswordHash = hash, PasswordSalt = salt, IsAdmin = true },
-                new User { Email = "second@mail.com", Username = "Second", PasswordHash = hash, PasswordSalt = salt, IsAdmin = false }
+                new User { Email = "admin@mail.com", Username = "Admin", PasswordHash = hash, PasswordSalt = salt, IsAdmin = true }
                 );
         }
     }
