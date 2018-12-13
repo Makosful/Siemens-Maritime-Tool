@@ -60,9 +60,23 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         /// Retrieves the full list of Rig entities from the storage
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Rig> ReadAll()
+        public IEnumerable<Rig> ReadAll(int page, int items)
         {
-            return Context.Rigs.Include(r => r.Locations);
+            var rigs = Context.Rigs.Include(rig => rig.Locations);
+
+            if (page == 0 || items == 0)
+                return rigs;
+
+            var list = rigs.ToList();
+            var paged = new List<Rig>(items);
+            var start = (items * (page - 1));
+            var end = start + items;
+            for ( /*start*/; start < end; start++)
+            {
+                paged.Add(list[start]);
+            }
+
+            return paged;
         }
 
         /// <summary>

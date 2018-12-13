@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Schwartz.Siemens.Core.ApplicationServices;
 using Schwartz.Siemens.Core.Entities.Rigs;
 using System;
-using System.Collections.Generic;
 
 namespace Schwartz.Siemens.Ui.RestApi.Controllers
 {
@@ -19,9 +18,9 @@ namespace Schwartz.Siemens.Ui.RestApi.Controllers
         private IRigService RigService { get; }
 
         [HttpGet]
-        public ActionResult<List<Rig>> GetAllRigs()
+        public ActionResult<FilteredList<Rig>> GetAllRigs(int page = 0, int items = 0)
         {
-            return Ok(RigService.ReadAll());
+            return Ok(RigService.ReadAll(page, items));
         }
 
         [HttpGet("{id}")]
