@@ -7,6 +7,8 @@ namespace Schwartz.Siemens.Core.Entities.Rigs
         public int Imo { get; set; }
         public string Name { get; set; }
         public List<Location> Locations { get; set; } = new List<Location>();
+        public string Type { get; set; }
+        public string Label { get; set; }
         public bool Outdated { get; set; }
     }
 }
