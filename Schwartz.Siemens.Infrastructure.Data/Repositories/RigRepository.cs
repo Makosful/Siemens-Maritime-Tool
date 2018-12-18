@@ -88,10 +88,32 @@ namespace Schwartz.Siemens.Infrastructure.Data.Repositories
         {
             try
             {
-                Context.Attach(item).State = EntityState.Modified;
+                //Context.Entry(item).State = EntityState.Modified;
+                //Context.Update(item);
+                if (!string.IsNullOrWhiteSpace(item.Name))
+                {
+                    item.Name = item.Name.Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(item.RigType))
+                {
+                    item.RigType = item.RigType.Trim();
+                }
+                var rig = Read(item.Imo);
 
-                Context.SaveChanges();
-                return item;
+                if (rig != null)
+                {
+                    if (!string.IsNullOrEmpty(item.Name))
+                        rig.Name = item.Name;
+
+                    if (!string.IsNullOrEmpty(item.RigType))
+                        rig.RigType = item.RigType;
+
+                    Context.Update(rig);
+
+                    Context.SaveChanges();
+                }
+
+                return rig;
             }
             catch (Exception)
             {

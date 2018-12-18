@@ -47,7 +47,7 @@ namespace Schwartz.Siemens.Infrastructure.Data
             var document = new HtmlWeb().Load(u);
 
             var rigName = GetRigName(document);
-
+            //TODO add rig Type. We will add label manually in the program if wanted ( null by default )
             return new Rig
             {
                 Imo = imo,
